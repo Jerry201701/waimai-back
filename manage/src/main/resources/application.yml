@@ -1,0 +1,88 @@
+server:
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+    min-spare-threads: 30
+  port: 8006
+    #context-path: /kitty-admin
+# DataSource
+spring:
+  datasource:
+    name: druidDataSource
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/diane?serverTimezone=CTT&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
+      username: root
+      password: root
+      filters: stat,wall,log4j,config
+      max-active: 100
+      initial-size: 1
+      max-wait: 60000
+      min-idle: 1
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: select 'x'
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-open-prepared-statements: 50
+      max-pool-prepared-statement-per-connection-size: 20
+  # spring boot admin
+  application:
+    name: waimai-manage
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: diane
+    password: Waimai1234$
+    virtual-host: /diane
+#  rabbitmq:
+#    host: 123.206.64.103
+#    port: 5672
+#    username: dian
+#    password: dian1234
+#    virtual-host: /dian
+
+#  rabbitmq:
+#    host: 120.25.121.42
+#    port: 5672
+#    username: diane
+#    password: Waimai1234$
+#    virtual-host: /diane
+
+#  cloud:
+#    consul:
+#      host: localhost
+#      port: 8500
+#      discovery:
+#        serviceName: ${spring.application.name}	# 注册到consul的服务名称
+#  boot:
+#    admin:
+#      client:
+#        url: "http://localhost:8000"
+## 开放健康检查接口
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
+#  endpoint:
+#    health:
+#      show-details: ALWAYS
+# pagehelper   
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
+
+#自定义参数，可以迁移走
+token:
+  #redis默认过期时间（2小时）(这是自定义的)(毫秒)
+  expirationMilliSeconds: 7200000

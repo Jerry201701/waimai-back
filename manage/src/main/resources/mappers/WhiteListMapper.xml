@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.WhiteListMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.model.WhiteList">
+        <result column="id" jdbcType="BIGINT" property="id" />
+        <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+        <result column="delivery_id" jdbcType="BIGINT" property="deliveryId" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="flag" jdbcType="TINYINT" property="flag" />
+    </resultMap>
+
+    <resultMap id="WhiteListResultMap" type="com.diane.manage.model.Delivery">
+        <id column="delivery_id" jdbcType="BIGINT" property="deliveryId" />
+        <result column="user_id" jdbcType="BIGINT" property="userId" />
+        <result column="delivery_name" jdbcType="VARCHAR" property="deliveryName" />
+        <result column="delivery_status" jdbcType="TINYINT" property="status" />
+        <result column="delivery_address" jdbcType="VARCHAR" property="deliveryAddress" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="region_id" jdbcType="VARCHAR" property="regionId" />
+        <result column="delivery_phone" jdbcType="VARCHAR" property="deliveryPhone" />
+    </resultMap>
+
+
+    <insert id="addWhiteList" parameterType="com.diane.manage.model.WhiteList" useGeneratedKeys="true" keyProperty="id">
+        insert into white_list_delivery
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shopId != null ">
+                shop_id,
+            </if>
+            <if test="deliveryId != null ">
+                delivery_id,
+            </if>
+            <if test="createTime != null ">
+                create_time,
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="shopId != null ">
+                #{shopId},
+            </if>
+            <if test="deliveryId != null ">
+                #{deliveryId},
+            </if>
+            <if test="createTime != null ">
+                #{createTime},
+            </if>
+            <if test="lastUpdateTime != null ">
+                #{lastUpdateTime},
+            </if>
+            <if test="flag != null">
+                #{flag},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateWhiteList" parameterType="com.diane.manage.model.WhiteList">
+        update white_list_delivery
+        <set>
+            <if test="lastUpdateTime != null ">
+             last_update_time=   #{lastUpdateTime},
+            </if>
+            <if test="flag != null">
+               flag= #{flag},
+            </if>
+        </set>
+        where delivery_id = #{deliveryId,jdbcType=BIGINT} and shop_id=#{shopId,jdbcType=BIGINT}
+    </update>
+
+    <select id="findWhiteListByPage" resultMap="BaseResultMap">
+        select id,shop_id,delivey_id,create_time,last_update_time,flag
+        from white_list_delivery
+    </select>
+    <select id="findSingleWhiteList" resultType="java.lang.Integer">
+        SELECT count(*) FROM diane.white_list_delivery where shop_id=#{shopId} and delivery_id=#{deliveryId}
+    </select>
+
+    <select id="findBlackListByShop" resultMap="WhiteListResultMap">
+        select  w.delivery_id,d.delivery_name,d.delivery_phone from white_list_delivery w
+        left join delivery d on d.id = w.delivery_id
+        where w.shop_id=#{shopId}
+        and w.flag =1
+    </select>
+
+
+</mapper>

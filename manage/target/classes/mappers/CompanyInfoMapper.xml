@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.CompanyMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.model.CompanyInfo">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="boss_name" jdbcType="VARCHAR" property="bossName" />
+        <result column="phone" jdbcType="VARCHAR" property="phone" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+        <result column="openid" jdbcType="VARCHAR" property="openid" />
+        <result column="region_id" jdbcType="BIGINT" property="regionId" />
+        <result column="create_by" jdbcType="BIGINT" property="createBy" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="last_update_by" jdbcType="BIGINT" property="lastUpdateBy" />
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="flag" jdbcType="TINYINT" property="flag" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+    </resultMap>
+
+
+    <resultMap id="searchResultMap" type="com.diane.manage.vo.shop.SearchShopVo">
+        <result column="shop_id" jdbcType="BIGINT" property="shopId"/>
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName"/>
+        <result column="month_sale" jdbcType="VARCHAR" property="monthSale"/>
+        <result column="delivery_time" jdbcType="VARCHAR" property="deliveryTime"/>
+        <result column="base_price" jdbcType="VARCHAR" property="basePrice"/>
+        <result column="delivery_fee" jdbcType="VARCHAR" property="deliveryFee"/>
+        <result column="sale_fee" jdbcType="VARCHAR" property="selfFee"/>
+        <result column="discount" jdbcType="VARCHAR" property="discount"/>
+        <result column="shop_stars" jdbcType="VARCHAR" property="shopStars"/>
+        <collection property="shopPicUrl" ofType="java.lang.String">
+            <constructor>
+                <arg column="shop_pic" />
+            </constructor>
+        </collection>
+    </resultMap>
+
+    <resultMap id="CompanyBasicInfoMap" type="com.diane.manage.vo.shop.CompanyBasicInfoVo">
+        <id column="id" jdbcType="BIGINT" property="companyId" />
+        <result column="company_name" jdbcType="VARCHAR" property="merName" />
+        <result column="boss_name" jdbcType="VARCHAR" property="bossName" />
+        <collection property="shops" ofType="java.lang.Long">
+            <constructor>
+                <arg column="shop_id" />
+            </constructor>
+        </collection>
+    </resultMap>
+
+    <resultMap id="CompanyTreeResultMap" type="com.diane.manage.vo.income.CompanyTreeVo">
+        <result column="id" jdbcType="BIGINT" property="id"/>
+        <result column="company_name" jdbcType="VARCHAR" property="name"/>
+<!--        <collection property="shops" resultMap="ShopTreeResultMap"> </collection>-->
+    </resultMap>
+    <resultMap id="ShopTreeResultMap" type="com.diane.manage.vo.income.ShopTreeVo">
+        <id column="shop_id" jdbcType="VARCHAR" property="shopId" />
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    </resultMap>
+
+
+    
+    <sql id="Base_Column_List">
+    id, boss_name, phone, address, create_by, create_time, last_update_by, last_update_time,
+    flag,remark,company_name,openid,region_id
+  </sql>
+
+
+        <insert id="insertSelective" parameterType="com.diane.manage.model.CompanyInfo" useGeneratedKeys="true" keyProperty="id">
+            insert into company_info
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="bossName != null and bossName!=''">
+                    boss_name,
+                </if>
+                <if test="phone != null and phone!=''">
+                    phone,
+                </if>
+                <if test="address != null and address!=''">
+                    address,
+                </if>
+                <if test="companyName != null and companyName!=''">
+                    company_name,
+                </if>
+                 <if test="regionId != null ">
+                    region_id,
+                </if>
+                <if test="remark != null and remark!=''">
+                    remark,
+                </if>
+                <if test="createBy != null and createBy !=''">
+                    create_by,
+                </if>
+                <if test="createTime != null ">
+                    create_time,
+                </if>
+                <if test="lastUpdateBy != null and lastUpdateBy!=''">
+                    last_update_by,
+                </if>
+                <if test="lastUpdateTime != null ">
+                    last_update_time,
+                </if>
+                <if test="flag != null">
+                    flag,
+                </if>
+                <if test="userId !=null ">
+                    user_id,
+                </if>
+                <if test="roleName !=null ">
+                    role_name,
+                </if>
+                <if test="operatePassword !=null ">
+                    operate_password,
+                </if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="bossName != null and bossName!=''">
+                    #{bossName},
+                </if>
+                <if test="phone != null and phone!=''">
+                    #{phone},
+                </if>
+                <if test="address != null and address!=''">
+                    #{address},
+                </if>
+                <if test="companyName != null and companyName!=''">
+                    #{companyName},
+                </if>
+                <if test="regionId != null ">
+                    #{regionId},
+                </if>
+                <if test="remark != null and remark!=''">
+                    #{remark},
+                </if>
+                <if test="createBy != null and createBy !=''">
+                    #{createBy},
+                </if>
+                <if test="createTime != null ">
+                    #{createTime},
+                </if>
+                <if test="lastUpdateBy != null and lastUpdateBy!=''">
+                    #{lastUpdateBy},
+                </if>
+                <if test="lastUpdateTime != null ">
+                    #{lastUpdateTime},
+                </if>
+                <if test="flag != null">
+                    #{flag},
+                </if>
+                <if test="userId !=null">
+                #{userId},
+                </if>
+                <if test="roleName !=null ">
+                    #{roleName},
+                </if>
+                <if test="operatePassword !=null ">
+                    #{operatePassword},
+                </if>
+            </trim>
+        </insert>
+
+    <select id="findPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from company_info
+    </select>
+
+    <select id="findPageConditions" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from company_info
+        <where>
+        <if test="regionId !=null">
+            and region_id=#{regionId,jdbcType=BIGINT}
+        </if>
+        <if test="id !=null">
+            and id =#{id,jdbcType=BIGINT}
+        </if>
+        <if test="userId !=null">
+            and user_id =#{userId,jdbcType=BIGINT}
+        </if>
+        </where>
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.diane.manage.model.CompanyInfo">
+        update company_info
+        <set>
+            <if test="bossName != null and bossName !=''">
+                boss_name = #{bossName,jdbcType=VARCHAR},
+            </if>
+            <if test="companyName != null and companyName!=''">
+                company_name = #{companyName,jdbcType=VARCHAR},
+            </if>
+             <if test="address != null and address!=''">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null and phone!=''">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+               <if test="regionId != null and regionId!=''">
+                region_id = #{regionId,jdbcType=BIGINT},
+            </if>
+               <if test="openid != null and openid!=''">
+                openid = #{openid,jdbcType=VARCHAR},
+            </if>
+               <if test="remark != null and remark!=''">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastUpdateBy != null">
+                last_update_by = #{lastUpdateBy,jdbcType=BIGINT},
+            </if>
+            <if test="lastUpdateTime != null">
+                last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="flag != null">
+                flag = #{flag,jdbcType=TINYINT},
+            </if>
+             <if test="operatePassword != null and operatePassword !=''">
+                 operate_password = #{operatePassword,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteCompanyInfo" parameterType="com.diane.manage.model.CompanyInfo">
+            update company_info
+            <set>
+                flag=0
+            </set>
+            where id = #{id}
+    </update>
+
+    <select id="findPageByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select  <include refid="Base_Column_List" />  from company_info
+        <where>
+        <if test="userId !=null">
+            user_id=#{userId}
+        </if>
+        </where>
+    </select>
+
+    <select id="findUserIdByCompany" parameterType="java.lang.Long" resultType="java.lang.Long">
+        select user_id from company_info where id=#{companyId}
+    </select>
+
+
+    <select id="searchShopByKeyWord" resultMap="searchResultMap">
+        select s.id shop_id,s.shop_name,p.picture_url shop_pic,s.base_price
+        from company_info  c
+        left join shop_info s on c.id=s.id
+        left join picture_info p on p.shop_id=s.id
+        where
+        s.region_id=#{regionId}
+        <if test="keyWord !=null and keyWord != ''">
+            <bind name="keyWord" value="'%' + _parameter.username + '%'" />
+            and c.compay_name like CONCAT('%',#{keyWord},'%')
+        </if>
+
+    </select>
+
+    <select id="searchShopByGood" resultMap="searchResultMap">
+        select shop.id shop_id,shop.shop_name,p.picture_url shop_pic,shop.base_price
+        from shop_info shop
+        inner join good_info good on shop.id=good.shop_id
+        left join picture_info p on p.shop_id=shop.id
+        <where>
+        (shop.shop_status =1 or shop.shop_status =5)
+           and  shop.region_id=#{regionId}
+            <if test="keyWord !=null and keyWord != ''">
+                <bind name="keyWord" value="'%' + keyWord + '%'" />
+                and good.good_name like CONCAT('%',#{keyWord},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="searchShopByCompany"  resultMap="searchResultMap">
+        select shop.id shop_id,shop.shop_name,p.picture_url shop_pic,shop.base_price
+        from shop_info shop
+        inner join company_info company on shop.company_id=company.id
+        left join picture_info p on p.shop_id=shop.id
+        <where>
+           (shop.shop_status =1 or shop_status=5)
+         and shop.region_id=#{regionId}
+            <if test="keyWord !=null and keyWord != ''">
+                <bind name="keyWord" value="'%' + keyWord + '%'" />
+                and shop.shop_name like CONCAT('%',#{keyWord},'%')
+            </if>
+        </where>
+
+    </select>
+    
+    
+    <select id="showCompanyBasicInfo" parameterType="java.lang.Long" resultMap="CompanyBasicInfoMap">
+        select company.id,company.company_name,company.boss_name,shop.id shop_id
+        from company_info company
+        left join shop_info shop on shop.company_id=company.id
+        where company.id = #{companyId}
+    </select>
+
+<!--    <select id="listCompanyTree" parameterType="java.lang.Long" resultMap="CompanyTreeResultMap">-->
+<!--        select c.id company_id,c.company_name,s.id shop_id,s.shop_name-->
+<!--        from company_info c-->
+<!--        left join shop_info s on c.id=s.company_id-->
+<!--        where c.region_id=#{regionId}-->
+<!--    </select>-->
+    <select id="listCompanyTree" parameterType="java.lang.Long" resultMap="CompanyTreeResultMap">
+        select  CONCAT('C',id) id,company_name from company_info where region_id=#{regionId}
+    </select>
+
+
+
+    <update id="companySettlementWay">
+        update company_info set settlement_way=#{settlementId}  where id =#{companyId}
+    </update>
+
+
+
+
+
+
+
+</mapper>

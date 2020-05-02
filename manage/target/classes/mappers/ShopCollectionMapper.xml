@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.ShopCollectionMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.vo.shop.ShopCollectionRespVo">
+        <result column="id" jdbcType="BIGINT" property="collectionId" />
+        <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+        <result column="good_id" jdbcType="BIGINT" property="goodId" />
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName"/>
+        <result column="openid" jdbcType="VARCHAR" property="openid" />
+        <result column="shop_starts" jdbcType="BIGINT" property="shopStars" />
+        <result column="sale_number" jdbcType="BIGINT" property="salesNumber" />
+        <result column="start_price" jdbcType="BIGINT" property="startPrice" />
+        <result column="delivery_fee" jdbcType="BIGINT" property="deliveryFee" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="flag" jdbcType="TINYINT" property="flag" />
+        <result column="price" jdbcType="TINYINT" property="price" />
+        <collection property="shopPicUrl" ofType="java.lang.String">
+            <constructor>
+                <arg column="shop_pic" />
+            </constructor>
+        </collection>
+    </resultMap>
+
+
+    <insert id="addShopCollection" parameterType="com.diane.manage.model.ShopCollection" useGeneratedKeys="true" keyProperty="id">
+
+        insert into shop_collection
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            <if test="shopId != null ">
+                shop_id,
+            </if>
+            <if test="openid != null and openid!=''">
+                openid,
+            </if>
+            <if test="createTime != null ">
+                create_time,
+            </if>
+            <if test="updateTime != null ">
+                update_time,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+             <if test="regionId != null">
+                region_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="shopId != null ">
+                #{shopId},
+            </if>
+            <if test="openid != null and openid!=''">
+                #{openid},
+            </if>
+            <if test="createTime != null ">
+                #{createTime},
+            </if>
+            <if test="updateTime != null ">
+                #{updateTime},
+            </if>
+            <if test="flag != null">
+                #{flag},
+            </if>
+            <if test="regionId != null">
+                #{regionId},
+            </if>
+        </trim>
+
+    </insert>
+
+    <select id="findCollectionPage"  resultMap="BaseResultMap">
+        select collection.id,collection.shop_id,s.shop_name,p.picture_url shop_pic
+        from shop_collection collection
+        left join   picture_info p on p.shop_id=collection.shop_id
+        left join shop_info s on s.id=collection.shop_id
+        <where>
+            collection.flag = 1
+            and collection.openid=#{openid}
+            <if test="regionId !=null ">
+            and collection.region_id = #{regionId}
+            </if>
+        </where>
+
+    </select>
+
+
+    <update id="updateShopCollection" parameterType="com.diane.manage.model.ShopCollection">
+        update shop_collection
+        <set>
+            <if test="flag != null">
+             flag =   #{flag},
+            </if>
+        </set>
+        where shop_id = #{shopId,jdbcType=BIGINT} and openid=#{openid,jdbcType=VARCHAR}
+    </update>
+    <delete id="deleteCollection">
+        delete from shop_collection where shop_id = #{shopId,jdbcType=BIGINT} and openid=#{openid,jdbcType=VARCHAR}
+    </delete>
+    
+    <select id="findCollectionStatus" resultType="java.lang.Boolean">
+        select flag from shop_collection where openid=#{openid} and shop_id=#{shopId}
+    </select>
+    
+    <select id="findCollectionId" resultType="java.lang.Long">
+        select id from shop_collection where openid=#{openid} and shop_id=#{shopId} 
+
+    </select>
+
+
+
+</mapper>

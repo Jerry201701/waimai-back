@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.ComplaintDeliveryMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.vo.AddressQuery">
+        <result column="id" jdbcType="BIGINT" property="id" />
+        <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+        <result column="delivery_id" jdbcType="BIGINT" property="deliveryId" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="order_number" jdbcType="VARCHAR" property="orderNum" />
+        <result column="complain_type" jdbcType="TINYINT" property="complainType" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+    </resultMap>
+
+
+    <insert id="addComplaintDelivery" parameterType="com.diane.manage.model.ComplaintDelivery" useGeneratedKeys="true" keyProperty="addressId">
+        insert into complaint_delivery
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shopId != null ">
+                shop_id,
+            </if>
+            <if test="deliveryId != null ">
+                delivery_id,
+            </if>
+            <if test="orderNum != null and orderNum!=''">
+                order_number,
+            </if>
+            <if test="content != null and content!=''">
+                content,
+            </if>
+            <if test="type != null ">
+                complaint_type,
+            </if>
+            <if test="createTime != null ">
+                create_time,
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="shopId != null ">
+                #{shopId},
+            </if>
+            <if test="deliveryId != null ">
+                #{deliveryId},
+            </if>
+            <if test="orderNum != null and orderNum!=''">
+                #{orderNum},
+            </if>
+            <if test="content != null and content!=''">
+                #{content},
+            </if>
+            <if test="type != null ">
+                #{type},
+            </if>
+            <if test="createTime != null ">
+                #{createTime},
+            </if>
+            <if test="lastUpdateTime != null ">
+                #{lastUpdateTime},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateComplaintDelivery" parameterType="com.diane.manage.model.ComplaintDelivery">
+        update complaint_delivery
+        <set>
+            <if test="shopId != null ">
+               shop_id= #{shopId},
+            </if>
+            <if test="deliveryId != null ">
+              delivery_id=  #{deliveryId},
+            </if>
+            <if test="orderNum != null and orderNum!=''">
+              order_number=  #{orderNum},
+            </if>
+            <if test="content != null and content!=''">
+               content= #{content},
+            </if>
+            <if test="type != null ">
+               complaint_type= #{type},
+            </if>
+            <if test="createTime != null ">
+               create_time= #{createTime},
+            </if>
+            <if test="lastUpdateTime != null ">
+              last_update_time=  #{lastUpdateTime},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="findComplaintDeliveryByPage">
+        select id,shop_id,delivery_id,content,complaint_type,order_number,create_time,last_update_time
+        from complaint_delivery
+    </select>
+
+</mapper>

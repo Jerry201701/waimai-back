@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.AssembleRecordMapper">
+    <resultMap id="AssembleRecordResultMap" type="com.diane.manage.model.BargainRecord">
+        <result column="id" jdbcType="BIGINT" property="id" />
+        <result column="good_id" jdbcType="BIGINT" property="goodId" />
+        <result column="good_price" jdbcType="BIGINT" property="goodPrice" />
+        <result column="bargain_id" jdbcType="BIGINT" property="bargainId" />
+        <result column="openid" jdbcType="VARCHAR" property="openid" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="bargainTime" />
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="user_pic_url" jdbcType="VARCHAR" property="userPicUrl" />
+        <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+        <result column="bargain_price" jdbcType="BIGINT" property="bargainPrice" />
+    </resultMap>
+
+    <resultMap id="AssembleConditionResultMap" type="com.diane.manage.vo.activity.ActivityConditionVo">
+        <result column="bargain_times" jdbcType="INTEGER" property="bargainTimes" />
+        <result column="bargain_time_limit" jdbcType="INTEGER" property="bargainTimeLimit" />
+        <result column="bargain_limit" jdbcType="DECIMAL" property="bargainLimit" />
+        <result column="min_bargain_payment" jdbcType="DECIMAL" property="minBargainPayment" />
+        <result column="bargain_id" jdbcType="DECIMAL" property="bargain_id" />
+        <result column="activity_id" jdbcType="DECIMAL" property="activityId" />
+        <result column="bargain_validity" jdbcType="DECIMAL" property="bargainValidity" />
+        <result column="good_id" jdbcType="DECIMAL" property="goodId" />
+    </resultMap>
+
+
+    <insert id="addAssembleRecord" parameterType="com.diane.manage.model.AssembleActivity" useGeneratedKeys="true" keyProperty="id">
+        insert into assemble_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="openid != null and openid!=''">
+                openid,
+            </if>
+            <if test="goodId != null ">
+                good_id,
+            </if>
+            <if test="assembleId != null ">
+                assemble_id,
+            </if>
+            <if test="createTime != null ">
+                create_time,
+            </if>
+            <if test="assemblePrice != null ">
+                assemble_price,
+            </if>
+            <if test="activityId != null ">
+                activity_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="openid != null and openid!=''">
+                #{openid},
+            </if>
+            <if test="goodId != null ">
+                #{goodId},
+            </if>
+            <if test="assembleId != null ">
+                #{assembleId},
+            </if>
+            <if test="bargainTime != null ">
+                #{bargainTime},
+            </if>
+            <if test="assemblePrice != null ">
+                #{assemblePrice},
+            </if>
+            <if test="activityId != null ">
+                #{activityId},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

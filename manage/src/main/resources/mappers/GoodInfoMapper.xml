@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.GoodMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.model.GoodInfo">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="good_name" jdbcType="VARCHAR" property="goodName" />
+        <result column="price" jdbcType="BIGINT" property="price" />
+        <result column="unit" jdbcType="BIGINT" property="unit" />
+        <result column="stock" jdbcType="BIGINT" property="stock" />
+        <result column="feature" jdbcType="VARCHAR" property="feature" />
+        <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+        <result column="sale_plan" jdbcType="VARCHAR" property="salePlan" />
+        <result column="onshelf" jdbcType="TINYINT" property="onShelf" />
+        <result column="restore" jdbcType="TINYINT" property="restore" />
+        <result column="create_by" jdbcType="BIGINT" property="createBy" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="last_update_by" jdbcType="BIGINT" property="lastUpdateBy" />
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="flag" jdbcType="TINYINT" property="flag" />
+        <result column="sale_price" jdbcType="BIGINT" property="salePrice" />
+        <result column="category_id" jdbcType="BIGINT" property="categoryId" />
+        <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+        <result column="inventory" jdbcType="TINYINT" property="inventory" />
+        <collection property="labels" resultMap="LabelResultMap"> </collection>
+        <collection property="goodPics" resultMap="PictureResultMap"> </collection>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, good_name, good_price, unit, create_by, create_time, last_update_by, last_update_time,
+    flag,stock,feature,shop_id,sale_plan,onshelf,restore,inventory
+  </sql>
+    <resultMap id="LabelResultMap" type="com.diane.manage.model.GoodLabel">
+        <id column="label_id" jdbcType="BIGINT" property="id" />
+        <result column="label_name" jdbcType="VARCHAR" property="labelName" />
+        <result column="label_price" jdbcType="BIGINT" property="labelPrice" />
+        <result column="label_stock" jdbcType="BIGINT" property="labelStock" />
+    </resultMap>
+    <resultMap id="PictureResultMap" type="com.diane.manage.model.PictureInfo">
+        <id column="picture_id" jdbcType="BIGINT" property="id" />
+        <result column="picture_url" jdbcType="VARCHAR" property="pictureUrl" />
+        <result column="good_id" jdbcType="BIGINT" property="goodId" />
+    </resultMap>
+    <resultMap id="PicInfoResultMap" type="com.diane.manage.vo.good.CopyGoodVo">
+        <result column="source_good_id" jdbcType="BIGINT" property="sourceGoodId" />
+        <result column="target_good_id" jdbcType="BIGINT" property="targetGoodId" />
+    </resultMap>
+    <resultMap id="LabelInfoResultMap" type="com.diane.manage.model.GoodLabel">
+
+
+    </resultMap>
+    <resultMap id="GoodTreeResultMap" type="com.diane.manage.vo.income.CompanyTreeVo">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="good_name" jdbcType="VARCHAR" property="name" />
+
+
+    </resultMap>
+
+    <insert id="insertSelective" parameterType="com.diane.manage.model.GoodInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into good_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="goodName != null and goodName!='' ">
+                good_name,
+            </if>
+            <if test="price != null ">
+                price,
+            </if>
+            <if test="unit != null ">
+                unit,
+            </if>
+            <if test="stock != null ">
+                stock,
+            </if>
+            <if test="feature != null and feature !='' ">
+                feature,
+            </if>
+            <if test="shopId != null ">
+                shop_id,
+            </if>
+            <if test="salePlan != null and salePlan !='' ">
+                sale_plan,
+            </if>
+            <if test="onShelf != null ">
+                onshelf,
+            </if>
+            <if test="restore != null ">
+                restore,
+            </if>
+            <if test="createBy != null and createBy !='' ">
+                create_by,
+            </if>
+            <if test="createTime != null ">
+                create_time,
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!='' ">
+                last_update_by,
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time,
+            </if>
+            <if test="flag != null ">
+                flag,
+            </if>
+            <if test="categoryId != null ">
+                category_id,
+            </if>
+            <if test="salePrice != null ">
+                sale_price,
+            </if>
+             <if test="inventory != null ">
+                 inventory,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">
+                #{id},
+            </if>
+            <if test="goodName != null and goodName!='' ">
+                #{goodName},
+            </if>
+            <if test="price != null ">
+                #{price},
+            </if>
+            <if test="unit != null ">
+                #{unit},
+            </if>
+            <if test="stock != null ">
+                #{stock},
+            </if>
+            <if test="feature != null and feature !=''  ">
+                #{feature},
+            </if>
+            <if test="shopId != null ">
+                #{shopId},
+            </if>
+            <if test="salePlan != null and salePlan !='' ">
+                #{salePlan},
+            </if>
+            <if test="onShelf != null ">
+                #{onShelf},
+            </if>
+            <if test="restore != null ">
+                #{restore},
+            </if>
+            <if test="createBy != null and createBy !='' ">
+                #{createBy},
+            </if>
+            <if test="createTime != null ">
+                #{createTime},
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!='' ">
+                #{lastUpdateBy},
+            </if>
+            <if test="lastUpdateTime != null ">
+                #{lastUpdateTime},
+            </if>
+            <if test="flag != null " >
+                #{flag},
+            </if>
+             <if test="categoryId != null " >
+                #{categoryId},
+            </if>
+            <if test="salePrice != null ">
+                #{salePrice},
+            </if>
+              <if test="inventory != null ">
+                #{inventory},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="findPage" resultMap="BaseResultMap">
+    select   g.id, g.good_name, g.price, g.unit,g.create_time, g.flag,g.stock,
+    g.feature,g.shop_id,g.sale_plan,g.onshelf,g.restore,g.inventory,g.shop_id,s.shop_name
+    from good_info g
+    left join shop_info s on s.id=g.shop_id
+    where g.flag=0
+    </select>
+
+    <select id="goodPageByRegion" resultMap="BaseResultMap" parameterType="com.diane.manage.vo.good.GoodQueryVo">
+    select   g.id, g.good_name, g.price, g.unit,g.create_time, g.flag,g.stock,
+    g.feature,g.shop_id,g.sale_plan,g.onshelf,g.restore,g.inventory,g.shop_id,s.shop_name
+    from good_info g
+    left join shop_info s on s.id=g.shop_id
+    <where>
+    g.flag=0
+    <if test="regionId !=null">
+        and g.region_id=#{regionId}
+    </if>
+    <if test="shopId !=null">
+        and shop_id=#{shopId}
+    </if>
+
+
+
+    </where>
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.diane.manage.model.CompanyInfo">
+        update good_info
+        <set>
+            <if test="goodName != null and goodName!='' ">
+                good_name = #{goodName,jdbcType=VARCHAR},
+            </if>
+              <if test="categoryId != null ">
+                category_id = #{categoryId,jdbcType=BIGINT},
+            </if>
+            <if test="price != null ">
+                price = #{price,jdbcType=BIGINT},
+            </if>
+            <if test="unit != null ">
+                unit = #{unit,jdbcType=VARCHAR},
+            </if>
+            <if test="stock != null ">
+                stock = #{stock,jdbcType=BIGINT},
+            </if>
+            <if test="feature != null and feature !='' ">
+                feature = #{feature,jdbcType=VARCHAR},
+            </if>
+            <if test="shopId != null ">
+                shop_id =#{shopId,jdbcType=BIGINT},
+            </if>
+            <if test="salePlan != null and salePlan !='' ">
+                sale_plan = #{salePlan,jdbcType=VARCHAR},
+            </if>
+            <if test="onShelf != null ">
+                onshelf = #{onShelf,jdbcType=TINYINT},
+            </if>
+            <if test="restore != null ">
+                restore =  #{restore,jdbcType=TINYINT},
+            </if>
+            <if test="createBy != null and createBy !='' ">
+                create_by = #{createBy,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null ">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!='' ">
+                last_update_by = #{lastUpdateBy,jdbcType=BIGINT},
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="flag != null ">
+                flag = #{flag,jdbcType=TINYINT},
+            </if>
+            <if test="salePrice != null ">
+                sale_price=#{salePrice},
+            </if>
+           <if test="inventory != null ">
+               inventory=#{inventory},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteGoodInfo" parameterType="com.diane.manage.model.GoodInfo">
+        update good_info
+        <set>
+            flag=0
+        </set>
+        where id = #{id}
+    </update>
+   <select id="getGoodDetailsById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select  gi.id, gi.good_name, gi.price, gi.unit, gi.create_by, gi.create_time, gi.last_update_by, gi.last_update_time,gi.sale_price,
+    gi.flag,gi.stock,gi.feature,gi.shop_id,gi.sale_plan,gi.onshelf,gi.restore,gl.id label_id,gl.label_name,gl.label_price,gl.label_stock,
+    gi.category_id,gc.category_name,si.shop_name,pi.id picture_id,pi.picture_url,pi.good_id,gi.inventory
+    from good_info gi
+    left join  (select id,label_name,label_price,label_stock,good_id  from good_label where flag=0)gl on gi.id=gl.good_id
+    left join (select id,picture_url,good_id from picture_info  where flag =0)pi on pi.good_id=gi.id
+    left join  shop_info si on si.id=gi.shop_id
+    left join good_category gc on gc.id = gi.category_id
+    <where>
+    gi.flag=0
+    and gi.id=#{goodId}
+    </where>
+   </select>
+
+    <select id="listGoodByConditions" parameterType="com.diane.manage.vo.GoodQuery" resultMap="BaseResultMap">
+    select  gi.id, gi.good_name, gi.price, gi.unit, gi.create_by, gi.create_time, gi.last_update_by, gi.last_update_time,
+    gi.flag,gi.stock,gi.feature,gi.shop_id,gi.sale_plan,gi.onshelf,gi.restore,gl.id label_id,gl.label_name,gl.label_price,gl.label_stock,
+    pi.id picture_id,pi.picture_url,pi.good_id,gi.sale_price,gi.category_id,gc.category_name,si.shop_name,si.inventory
+    from good_info gi
+    left join  (select * from good_label where flag=0 ) gl on gi.id=gl.good_id
+    left join (select * from picture_info where flag=0) pi on pi.good_id=gi.id
+    left join  shop_info si on si.id=gi.shop_id
+    left join good_category gc on gc.id = gi.category_id
+    <where>
+    gi.flag=0
+    <if test="companyId !=null">
+        and si.company_id=#{companyId}
+    </if>
+    <if test="shopId !=null">
+       and  gi.shop_id=#{shopId}
+    </if>
+    <if test="categoryId !=null">
+        and gi.category_id=#{categoryId}
+    </if>
+    <if test="keyWord !=null and keyWord !=''">
+        <bind name="keyWord" value="'%' + keyWord + '%'"/>
+        and gi.good_name like CONCAT('%',#{keyWord},'%')
+    </if>
+    <if test="salePlan !=null and salePlan !=''">
+        <bind name="salePlan" value="'%' + salePlan + '%'"/>
+        and gi.sale_plan like CONCAT('%',#{salePlan},'%')
+    </if>
+    <if test="status ==1 ">
+        and gi.stock &gt; 0
+    </if>
+    <if test="status ==2">
+        and gi.stock &lt;= 0
+    </if>
+    </where>
+    order  by gi.create_time desc
+    </select>
+
+
+
+    <insert id="copyShopGood" parameterType="com.diane.manage.vo.shop.ShopReqVo" >
+    insert into good_info(good_name,price,stock,shop_id,label,unit,onshelf,restore,flag,sale_plan,create_time,feature,category_id,sale_price,inventory,source_good_id)
+    SELECT good_name,price,stock ,#{shopId},label,unit,onshelf,restore,flag,sale_plan,#{createTime},feature,category_id,sale_price,inventory,id FROM good_info where shop_id=#{coneShopId};
+    </insert>
+
+
+    <select id="findGoodPicInfoByShop" parameterType="java.lang.Long" resultMap="PicInfoResultMap">
+        select g.id target_good_id, g.source_good_id from good_info g
+        where g.shop_id=#{shopId}
+    </select>
+    <select id="findGoodByShop" parameterType="java.lang.Long" resultMap="GoodTreeResultMap">
+        select CONCAT('G',id) id,good_name from  good_info where shop_id=#{shopId}
+
+    </select>
+
+
+    <update id="goodDeliverySettlementWay">
+        update good_info set settlement_way=#{settlementId}  where id =#{goodId}
+    </update>
+
+    <update id="changeCopyCategoryId" parameterType="com.diane.manage.vo.category.CopyCategoryVo">
+        update good_info set category_id =#{targetId} where shop_id=#{shopId} and category_id=#{sourceId}
+    </update>
+
+    <select id="findShopStock" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        select stock from good_info where shop_id=#{shopId}
+
+    </select>
+
+    <update id="updateStock" >
+        update good_info set stock = stock - #{quantity} where id=#{goodId}
+    </update>
+
+
+
+
+
+
+
+</mapper>

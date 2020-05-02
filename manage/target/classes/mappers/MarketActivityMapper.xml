@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.MarketActivityMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.model.MarketActivity">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="activity_name" jdbcType="VARCHAR" property="activityName" />
+        <result column="good_id" jdbcType="BIGINT" property="goodId" />
+        <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="create_by" jdbcType="BIGINT" property="createBy" />
+        <result column="last_update_by" jdbcType="BIGINT" property="lastUpdateBy" />
+        <result column="flag" jdbcType="TINYINT" property="flag" />
+        <result column="activity_type" jdbcType="TINYINT" property="type" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="region_id" jdbcType="BIGINT" property="regionId" />
+        <result column="company_id" jdbcType="BIGINT" property="companyId" />
+        <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+        <result column="good_name" jdbcType="BIGINT" property="goodName" />
+        <result column="company_name" jdbcType="BIGINT" property="companyName" />
+        <result column="shop_name" jdbcType="BIGINT" property="shopName" />
+    </resultMap>
+    <resultMap id="ActivityGoodMap" type="com.diane.manage.vo.activity.ActivityRespVo">
+        <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+        <result column="region_id" jdbcType="BIGINT" property="regionId" />
+        <result column="company_id" jdbcType="BIGINT" property="companyId" />
+        <result column="good_id" jdbcType="BIGINT" property="goodId" />
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+        <result column="region_name" jdbcType="VARCHAR" property="regionName" />
+        <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+        <result column="good_name" jdbcType="VARCHAR" property="goodName" />
+        <result column="promotion_type" jdbcType="TINYINT" property="promotionType" />
+        <result column="promotion_price" jdbcType="DECIMAL" property="promotionPrice" />
+    </resultMap>
+
+    <resultMap id="PromotionResultMap" type="com.diane.manage.vo.activity.ActivityRespVo">
+        <result column="activity_id" jdbcType="BIGINT" property="activityId" />
+        <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+        <result column="region_id" jdbcType="BIGINT" property="regionId" />
+        <result column="company_id" jdbcType="BIGINT" property="companyId" />
+        <result column="good_id" jdbcType="BIGINT" property="goodId" />
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+        <result column="region_name" jdbcType="VARCHAR" property="regionName" />
+        <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+        <result column="good_name" jdbcType="VARCHAR" property="goodName" />
+        <result column="promotion_type" jdbcType="TINYINT" property="promotionType" />
+        <result column="promotion_price" jdbcType="DECIMAL" property="promotionPrice" />
+        <result column="min_bargain_payment" jdbcType="DECIMAL" property="bargainBottomPrice" />
+        <result column="promotion_stock" jdbcType="DECIMAL" property="promotionStock" />
+        <result column="valid_time" jdbcType="DECIMAL" property="validTime" />
+        <result column="leader_price" jdbcType="DECIMAL" property="createPrice" />
+        <result column="member_price" jdbcType="DECIMAL" property="joinPrice" />
+        <result column="stock" jdbcType="INTEGER" property="promotionStock" />
+        <result column="old_price" jdbcType="INTEGER" property="price" />
+        <result column="end_time" jdbcType="TIMESTAMP" property="secKillEndTime" />
+        <result column="bargain_self" jdbcType="TINYINT" property="bargainSelf" />
+        <result column="min_bargain_time" jdbcType="SMALLINT" property="minBargainTime" />
+        <result column="max_bargain_time" jdbcType="SMALLINT" property="maxBargainTime" />
+        <collection property="goodPic" ofType="java.lang.String">
+            <constructor>
+                <arg column="good_pic" />
+            </constructor>
+        </collection>
+    </resultMap>
+
+    <resultMap id="ActivityConditionResultMap" type="com.diane.manage.vo.activity.ActivityConditionVo">
+        <result column="leader_price" jdbcType="DECIMAL" property="leaderPrice" />
+        <result column="member_price" jdbcType="DECIMAL" property="memberPrice" />
+        <result column="assemble_Validity" jdbcType="INTEGER" property="assembleValidity" />
+        <result column="min_people" jdbcType="INTEGER" property="minPeople" />
+
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+    id, activity_name, create_time,last_update_time,create_by,last_update_by,flag,remark,good_id,begin_time,end_time,good_id,
+    region_id,company_id,shop_id
+  </sql>
+
+    <insert id="insertSelective" parameterType="com.diane.manage.model.NavInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into market_activity
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="activityName != null and activityName!=''">
+                activity_name,
+            </if>
+            <if test="beginTime != null ">
+                begin_time,
+            </if>
+            <if test="endTime != null ">
+                end_time,
+            </if>
+            <if test="type != null ">
+                activity_type,
+            </if>
+            <if test="goodId != null ">
+                good_id,
+            </if>
+            <if test="createTime != null ">
+                create_time,
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time,
+            </if>
+              <if test="lastUpdateBy != null ">
+                last_update_by,
+            </if>
+              <if test="createBy != null ">
+                create_by,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+            <if test="remark != null and remark !=''">
+                remark,
+            </if>
+            <if test="regionId != null ">
+                region_id,
+            </if>
+            <if test="companyId != null ">
+                company_id,
+            </if>
+            <if test="shopId != null ">
+                shop_id,
+            </if>
+               <if test="minPeople != null ">
+                min_people,
+            </if>
+               <if test="memberPrice != null ">
+                member_price,
+            </if>
+               <if test="leaderPrice != null ">
+                leader_price,
+            </if>
+               <if test="groupValidityTime != null ">
+                group_validity_time,
+            </if>
+
+               <if test="minBargainPayment != null ">
+                min_bargain_payment,
+            </if>
+               <if test="bargainValidity != null ">
+                bargain_validity,
+            </if>
+           <if test="bargainSelf != null ">
+            bargain_self,
+           </if>
+            <if test="activityStatus != null ">
+            activity_status,
+           </if>
+            <if test="activityPrice != null ">
+            activity_price,
+           </if>
+            <if test="stock != null ">
+            stock,
+           </if>
+            <if test="restriction != null ">
+                restriction,
+           </if>
+            <if test="maxBargainPerTime != null ">
+                max_bargain_time,
+            </if>
+             <if test="minBargainPerTime != null ">
+                min_bargain_time,
+            </if>
+              <if test="bargainTimeLimit != null ">
+                bargain_time_limit,
+              </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="activityName != null and activityName!=''">
+                #{activityName},
+            </if>
+            <if test="beginTime != null ">
+                #{beginTime},
+            </if>
+            <if test="endTime != null ">
+                #{endTime},
+            </if>
+            <if test="type != null ">
+                #{type},
+            </if>
+            <if test="goodId != null ">
+                #{goodId},
+            </if>
+            <if test="createTime != null ">
+                #{createTime},
+            </if>
+            <if test="lastUpdateTime != null ">
+                #{lastUpdateTime},
+            </if>
+            <if test="lastUpdateBy != null ">
+                #{lastUpdateBy},
+            </if>
+            <if test="createBy != null ">
+                #{createBy},
+            </if>
+            <if test="flag != null">
+                #{flag},
+            </if>
+            <if test="remark != null and remark !=''">
+                #{remark},
+            </if>
+            <if test="regionId != null ">
+                #{regionId},
+            </if>
+            <if test="companyId != null ">
+                #{companyId},
+            </if>
+            <if test="shopId != null ">
+                #{shopId},
+            </if>
+            <if test="minPeople != null ">
+                #{minPeople},
+            </if>
+            <if test="memberPrice != null ">
+                #{memberPrice},
+            </if>
+            <if test="leaderPrice != null ">
+                #{leaderPrice},
+            </if>
+            <if test="groupValidityTime != null ">
+                #{groupValidityTime},
+            </if>
+            <if test="minBargainPayment != null ">
+                #{minBargainPayment},
+            </if>
+            <if test="bargainValidity != null ">
+                #{bargainValidity},
+            </if>
+            <if test="bargainSelf != null ">
+                #{bargainSelf},
+            </if>
+            <if test="activityStatus != null ">
+                #{activityStatus},
+            </if>
+            <if test="activityPrice != null ">
+                #{activityPrice},
+            </if>
+            <if test="stock != null ">
+                #{stock},
+            </if>
+            <if test="restriction != null ">
+                #{restriction},
+            </if>
+            <if test="maxBargainPerTime != null ">
+                #{maxBargainPerTime},
+            </if>
+            <if test="minBargainPerTime != null ">
+                #{minBargainPerTime},
+            </if>
+          <if test="bargainTimeLimit != null ">
+                #{bargainTimeLimit},
+          </if>
+        </trim>
+    </insert>
+
+    <select id="findPage" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select a.id,a.activity_name,a.remark,a.create_time,s.shop_name,c.company_name,g.good_name,activity_type
+        from market_activity a
+        left join shop_info s on s.id=a.shop_id
+        left join company_info c on c.id=a.company_id
+        left join good_info g on g.id=a.good_id
+        <where>
+            a.flag =1
+            <if test="regionId !=null">
+            and a.region_id=#{regionId}
+            </if>
+        </where>
+        and a.region_id=#{regionId}
+    </select>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.diane.manage.model.MarketActivity">
+        update market_activity
+        <set>
+            <if test="activityName != null and activityName!=''">
+             activity_name =   #{activityName},
+            </if>
+            <if test="beginTime != null ">
+              begin_time =  #{beginTime},
+            </if>
+            <if test="endTime != null ">
+               end_time = #{endTime},
+            </if>
+            <if test="type != null ">
+              activity_type =  #{type},
+            </if>
+            <if test="goodId != null ">
+              good_id =  #{goodId},
+            </if>
+            <if test="createTime != null ">
+              create_time =  #{createTime},
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time = #{lastUpdateTime},
+            </if>
+            <if test="lastUpdateBy != null ">
+                last_update_by = #{lastUpdateBy},
+            </if>
+            <if test="createBy != null ">
+                create_by = #{createBy},
+            </if>
+            <if test="flag != null">
+                flag = #{flag},
+            </if>
+            <if test="remark != null and remark !=''">
+                remark = #{remark},
+            </if>
+            <if test="regionId != null ">
+               region_id = #{regionId},
+            </if>
+            <if test="companyId != null ">
+               company_id = #{companyId},
+            </if>
+            <if test="shopId != null ">
+               shop_id = #{shopId},
+            </if>
+            <if test="minPeople != null ">
+               min_people = #{minPeople},
+            </if>
+            <if test="memberPrice != null ">
+              member_price =  #{memberPrice},
+            </if>
+            <if test="leaderPrice != null ">
+             leader_price =   #{leaderPrice},
+            </if>
+            <if test="groupValidityTime != null ">
+              group_validity_time =  #{groupValidityTime},
+            </if>
+            <if test="minBargainPayment != null ">
+             min_bargain_payment =   #{minBargainPayment},
+            </if>
+            <if test="bargainValidity != null ">
+              bargain_validity =  #{bargainValidity},
+            </if>
+            <if test="bargainSelf != null ">
+             bargain_self =   #{bargainSelf},
+            </if>
+            <if test="activityStatus != null ">
+              activity_status  =  #{activityStatus},
+            </if>
+            <if test="activityPrice != null ">
+             activity_price =   #{activityPrice},
+            </if>
+            <if test="stock != null ">
+              stock =  #{stock},
+            </if>
+            <if test="restriction != null ">
+              restriction =  #{restriction},
+            </if>
+            <if test="maxBargainPerTime != null ">
+              max_bargain_time  #{maxBargainPerTime},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteActivityInfo" parameterType="com.diane.manage.model.MarketActivity">
+        update market_activity
+        <set>
+            flag = 0
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <select id="listNavByRegion" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from market_activity
+        where region_id=#{regionId}
+    </select>
+
+
+    <select id="findShopByRegion" parameterType="java.lang.Long"  resultMap="ActivityGoodMap">
+        select id shop_id,shop_name,region_id from shop_info
+        where region_id=#{regionId}
+    </select>
+
+
+    <select id="findGoodByShop" parameterType="java.lang.Long" resultMap="ActivityGoodMap">
+        select  id good_id,good_name from good_info where shop_id=#{shopId}
+    </select>
+
+
+    <select id="listPromotion" parameterType="java.lang.Long" resultMap="PromotionResultMap">
+        select m.id activity_id,m.activity_name,m.activity_type promotion_type,(
+        CASE m.activity_type
+                WHEN 1 THEN
+                    m.activity_price
+                WHEN 2 THEN
+                    m.member_price
+                WHEN 4 THEN
+                    g.price
+                ELSE
+                    m.min_bargain_payment
+                END
+        ) promotion_price,p.picture_url good_pic,g.good_name,m.shop_id,m.good_id,m.company_id,m.region_id,m.min_bargain_payment,
+        s.shop_name ,c.company_name,d.region_name
+        from market_activity m
+        left join good_info g on m.good_id=g.id
+        left join picture_info p on p.good_id=m.good_id
+        left join shop_info s on s.id=m.shop_id
+        left join company_info c on c.id=m.company_id
+        left join delivery_region d on m.region_id=d.id
+        where
+        m.flag = 1
+        and m.region_id=#{regionId}
+    </select>
+
+    <select id="findPromotionDetail" parameterType="java.lang.Long" resultMap="PromotionResultMap">
+         select m.id activity_id,m.activity_name,m.activity_type promotion_type,(
+        CASE m.activity_type
+                WHEN 1 THEN
+                    m.activity_price
+                WHEN 2 THEN
+                    m.member_price
+                WHEN 4 THEN
+                    g.price
+                ELSE
+                    m.min_bargain_payment
+                END
+        ) promotion_price,p.picture_url good_pic,g.good_name,m.shop_id,m.good_id,m.company_id,m.region_id,s.shop_name ,
+        m.min_bargain_payment,c.company_name,d.region_name,g.price old_price,m.stock promotion_stock,m.group_validity_time valid_time,
+        m.leader_price ,m.member_price,m.bargain_self,m.end_time,m.min_bargain_time,m.max_bargain_time
+        from market_activity m
+        left join good_info g on m.good_id=g.id
+        left join picture_info p on p.good_id=m.good_id
+        left join shop_info s on s.id=m.shop_id
+        left join company_info c on c.id=m.company_id
+        left join delivery_region d on m.region_id=d.id
+        where
+        m.flag = 1
+        and m.id=#{activityId}
+
+    </select>
+
+    <select id="findActivityCondition" parameterType="java.lang.Long" resultMap="ActivityConditionResultMap">
+            select  leader_price,member_price,group_validity_time assemble_Validity,min_people
+            from market_activity where id=#{activityId}
+    </select>
+
+
+
+</mapper>

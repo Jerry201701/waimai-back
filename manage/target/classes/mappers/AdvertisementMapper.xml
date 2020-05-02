@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.AdvertisementMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.model.Advertisement">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="picture_url" jdbcType="VARCHAR" property="pictureUrl" />
+        <result column="path" jdbcType="VARCHAR" property="path" />
+        <result column="region_id" jdbcType="BIGINT" property="regionId" />
+        <result column="create_by" jdbcType="BIGINT" property="createBy" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="last_update_by" jdbcType="BIGINT" property="lastUpdateBy" />
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="flag" jdbcType="TINYINT" property="flag" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="advertisement_name" jdbcType="VARCHAR" property="advertisementName" />
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, picture_url, path,  create_by, create_time, last_update_by, last_update_time,
+    flag,remark,region_id,advertisement_name
+  </sql>
+
+
+    <insert id="insertSelective" parameterType="com.diane.manage.model.Advertisement" useGeneratedKeys="true" keyProperty="id">
+        insert into advertisement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+             <if test="advertisementName != null">
+                advertisement_name,
+            </if>
+            <if test="regionId != null ">
+                region_id,
+            </if>
+            <if test="path != null and path!=''">
+                path,
+            </if>
+            <if test="pictureUrl != null and pictureUrl!=''">
+                picture_url,
+            </if>
+            <if test="remark != null and remark!=''">
+                remark,
+            </if>
+            <if test="createBy != null and createBy !=''">
+                create_by,
+            </if>
+            <if test="createTime != null ">
+                create_time,
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!=''">
+                last_update_by,
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="advertisementName != null">
+                #{advertisementName},
+            </if>
+            <if test="regionId != null ">
+                #{regionId},
+            </if>
+            <if test="path != null and path!=''">
+                #{path},
+            </if>
+            <if test="pictureUrl != null and pictureUrl!=''">
+                #{pictureUrl},
+            </if>
+            <if test="remark != null and remark!=''">
+                #{remark},
+            </if>
+            <if test="createBy != null and createBy !=''">
+                #{createBy},
+            </if>
+            <if test="createTime != null ">
+                #{createTime},
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!=''">
+                #{lastUpdateBy},
+            </if>
+            <if test="lastUpdateTime != null ">
+                #{lastUpdateTime},
+            </if>
+            <if test="flag != null">
+                #{flag},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="findPage" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from advertisement
+        where region_id=#{regionId}
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.diane.manage.model.Advertisement">
+        update advertisement
+        <set>
+            <if test="regionId != null ">
+               region_id= #{regionId,jdbcType=BIGINT},
+            </if>
+            <if test="advertisementName != null ">
+               advertisement_name= #{advertisementName,jdbcType=VARCHAR},
+            </if>
+            <if test="path != null and path!=''">
+               path= #{path,jdbcType=VARCHAR},
+            </if>
+            <if test="pictureUrl != null and pictureUrl!=''">
+               picture_url= #{pictureUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null and remark!=''">
+               remark= #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null and createBy !=''">
+               create_by= #{createBy,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null ">
+               create_time= #{createTime,jdbcType=BIGINT},
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!=''">
+              last_update_by=  #{lastUpdateBy,jdbcType=BIGINT},
+            </if>
+            <if test="lastUpdateTime != null ">
+              last_update_time=  #{lastUpdateTime,jdbcType=BIGINT},
+            </if>
+            <if test="flag != null">
+              flag=  #{flag,jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteAdvertisement" parameterType="com.diane.manage.model.Advertisement">
+        update advertisement
+        <set>
+            flag=0
+        </set>
+        where id = #{id}
+    </update>
+    <select id="listAdvertisement" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select id,region_id,path,remark,create_time,advertisement_name,picture_url
+        from advertisement
+        where region_id=#{regionId}
+        order by create_time desc
+    </select>
+
+
+
+
+
+</mapper>

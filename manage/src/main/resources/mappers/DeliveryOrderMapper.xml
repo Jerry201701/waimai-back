@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.DeliveryOrderMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.model.DeliveryOrderInfo">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <id column="address_id" jdbcType="BIGINT" property="addressId" />
+        <id column="assemble" jdbcType="TINYINT" property="assemble" />
+        <result column="appointment" jdbcType="TINYINT" property="appointment" />
+        <result column="delivery" jdbcType="TINYINT" property="delivery" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="pay_way" jdbcType="TINYINT" property="payWay" />
+        <result column="shop_id" jdbcType="BIGINT" property="shop_id" />
+        <result column="openid" jdbcType="VARCHAR" property="amount" />
+        <result column="order_status" jdbcType="TINYINT" property="status" />
+        <result column="amount" jdbcType="BIGINT" property="amount" />
+        <result column="pay_amount" jdbcType="BIGINT" property="payAmount" />
+        <result column="order_number" jdbcType="VARCHAR" property="orderNumber" />
+        <result column="create_by" jdbcType="BIGINT" property="createBy" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="last_update_by" jdbcType="BIGINT" property="lastUpdateBy" />
+    </resultMap>
+    <resultMap id="OrderGoodResultMap" type="com.diane.manage.vo.OrderInfoVo">
+        <result column="order_number" jdbcType="VARCHAR" property="orderNumber" />
+        <result column="order_id" jdbcType="BIGINT" property="orderId" />
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+        <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+        <result column="order_time" jdbcType="TIMESTAMP" property="orderTime" />
+        <result column="amount" jdbcType="BIGINT" property="amount" />
+        <result column="pay_amount" jdbcType="BIGINT" property="payAmount" />
+        <result column="pay_status" jdbcType="TINYINT" property="payStatus" />
+        <result column="delivery" jdbcType="TINYINT" property="delivery" />
+        <result column="address_name" jdbcType="VARCHAR" property="receiverAddress" />
+        <result column="contact" jdbcType="VARCHAR" property="receiverContact" />
+        <result column="phone" jdbcType="VARCHAR" property="receiverPhone" />
+        <result column="delivery_status" jdbcType="VARCHAR" property="deliveryStatus" />
+        <result column="handle_status" jdbcType="VARCHAR" property="handleStatus" />
+        <collection property="shopPicUrl" ofType="java.lang.String">
+            <constructor>
+                <arg column="picture_url" />
+            </constructor>
+        </collection>
+    </resultMap>
+
+    <resultMap id="ShopOrderResultMap" type="com.diane.manage.vo.order.ShopOrderRespVo">
+        <result column="order_number" jdbcType="VARCHAR" property="orderNumber" />
+        <result column="contact" jdbcType="VARCHAR" property="customerName" />
+        <result column="phone" jdbcType="VARCHAR" property="phone" />
+        <result column="address_name" jdbcType="VARCHAR" property="address" />
+        <result column="amount" jdbcType="VARCHAR" property="amount" />
+        <result column="pay_status" jdbcType="VARCHAR" property="payStatus" />
+        <result column="order_time" jdbcType="VARCHAR" property="orderTime" />
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+        <result column="delivery" jdbcType="VARCHAR" property="delivery" />
+        <result column="shop_id" jdbcType="VARCHAR" property="shopId" />
+        <result column="id" jdbcType="VARCHAR" property="id" />
+        <result column="times" jdbcType="VARCHAR" property="times" />
+        <result column="counts" jdbcType="VARCHAR" property="counts" />
+        <result column="pack_charges" jdbcType="BIGINT" property="packCharges" />
+
+    </resultMap>
+
+    <resultMap id="DeliveryOrderStatusMap" type="com.diane.manage.model.DeliveryShop">
+        <result column="refund_amount" jdbcType="BIGINT" property="refundAmount" />
+        <result column="pay_amount" jdbcType="BIGINT" property="payAmount" />
+        <result column="pay_status" jdbcType="TINYINT" property="payStatus" />
+        <result column="auto_receipt"  jdbcType="TINYINT" property="autoReceipt" />
+        <result column="order_id"  jdbcType="BIGINT" property="orderId" />
+        <result column="order_number"  jdbcType="VARCHAR" property="orderNumber" />
+        <result column="shop_id"  jdbcType="BIGINT" property="shopId" />
+        <result column="refund_number"  jdbcType="BIGINT" property="refundNumber" />
+        <result column="handle_status"  jdbcType="BIGINT" property="handleStatus" />
+        <result column="delivery_status"  jdbcType="BIGINT" property="deliveryStatus" />
+        <result column="delivery_fee"  jdbcType="SMALLINT" property="deliveryFee" />
+        <result column="delivery_id"  jdbcType="SMALLINT" property="deliveryId" />
+        <result column="company_id"  jdbcType="SMALLINT" property="companyId" />
+        <result column="amount"  jdbcType="SMALLINT" property="amount" />
+
+    </resultMap>
+    
+    <resultMap id="StatisticsDelivery" type="com.diane.manage.vo.delivery.StatisticsDeliveryVo">
+        <result column="count_delivery_time"  jdbcType="VARCHAR" property="deliveryDate" />
+        <result column="total_delivery_number"  jdbcType="INTEGER" property="totalDeliveryNumber" />
+        <result column="total_delivery_fee"  jdbcType="DECIMAL" property="allAmount" />
+        <result column="success_number"  jdbcType="DECIMAL" property="successCount" />
+        <result column="fail_number"  jdbcType="DECIMAL" property="failCount" />
+        <result column="total_number"  jdbcType="DECIMAL" property="totalDeliveryNumber" />
+    </resultMap>
+    <resultMap id="ShopStatisticsResultMap" type="com.diane.manage.vo.shop.ShopStatisticsRespVo">
+        <result column="turn_over"  jdbcType="DECIMAL" property="turnover" />
+        <result column="order_number"  jdbcType="DECIMAL" property="orderNumber" />
+        <result column="refund"  jdbcType="DECIMAL" property="refund" />
+        <result column="shop_id"  jdbcType="DECIMAL" property="shopId" />
+        <result column="income_number"  jdbcType="DECIMAL" property="incomeNumber" />
+        <result column="success_count"  jdbcType="DECIMAL" property="successCount" />
+        <result column="fail_count"  jdbcType="DECIMAL" property="failCount" />
+        <result column="company_name"  jdbcType="DECIMAL" property="companyName" />
+        <result column="shop_name"  jdbcType="DECIMAL" property="shopName" />
+    </resultMap>
+
+
+
+    <insert id="insertSelective" parameterType="com.diane.manage.model.DeliveryOrderInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into delivery_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="addressId != null ">
+                address_id,
+            </if>
+            <if test="appointment != null ">
+                appointment,
+            </if>
+            <if test="assemble != null ">
+                assemble,
+            </if>
+            <if test="delivery != null ">
+                delivery,
+            </if>
+            <if test="remark != null and remark !='' ">
+                remark,
+            </if>
+            <if test="orderTime != null ">
+                order_time,
+            </if>
+            <if test="payWay !=null ">
+                pay_way,
+            </if>
+            <if test="shopId !=null ">
+                shop_id,
+            </if>
+            <if test="openid !=null and openid !=''">
+                openid,
+            </if>
+            <if test="payStatus !=null ">
+                pay_status,
+            </if>
+            <if test="orderNumber !=null and orderNumber !=''">
+                order_number,
+            </if>
+             <if test="amount !=null ">
+                amount,
+            </if>
+             <if test="payAmount !=null ">
+                pay_amount,
+            </if>
+            <if test="regionId !=null ">
+                region_id,
+            </if>
+            <if test="appointmentTime !=null and appointmentTime !=''">
+                appointment_time,
+            </if>
+             <if test="assembleId !=null ">
+                assemble_id,
+            </if>
+            <if test="deliveryFee !=null ">
+                delivery_fee,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="addressId != null ">
+                #{addressId},
+            </if>
+            <if test="appointment != null ">
+                #{appointment},
+            </if>
+            <if test="assemble != null ">
+                #{assemble},
+            </if>
+            <if test="delivery != null ">
+                #{delivery},
+            </if>
+            <if test="remark != null and remark !='' ">
+                #{remark},
+            </if>
+            <if test="orderTime != null ">
+                #{orderTime},
+            </if>
+            <if test="payWay !=null ">
+                #{payWay},
+            </if>
+            <if test="shopId !=null ">
+                #{shopId},
+            </if>
+            <if test="openid !=null and openid !=''">
+                #{openid},
+            </if>
+            <if test="payStatus !=null ">
+                #{payStatus},
+            </if>
+            <if test="orderNumber !=null and orderNumber !=''">
+                #{orderNumber},
+            </if>
+            <if test="amount !=null ">
+                #{amount},
+            </if>
+            <if test="payAmount !=null ">
+                #{payAmount},
+            </if>
+             <if test="regionId !=null ">
+                #{regionId},
+            </if>
+             <if test="appointmentTime !=null and appointmentTime !=''">
+                #{appointmentTime},
+            </if>
+              <if test="assembleId !=null ">
+                #{assembleId},
+            </if>
+             <if test="deliveryFee !=null ">
+                #{deliveryFee},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="deliveryOrderList"  resultMap="OrderGoodResultMap" parameterType="com.diane.manage.vo.order.OrderQueryInfo">
+        select o.id order_id, o.order_number,o.amount,o.pay_amount,o.order_time,o.pay_status,o.delivery,shop.shop_id,
+        shop.shop_name,shop.picture_url,a.address_name,a.contact,a.phone,o.delivery_status,o.handle_status
+        from  delivery_order o
+        left join (select s.id shop_id, s.shop_name, p.picture_url from shop_info s  left join picture_info p on p.shop_id=s.id ) shop
+        on shop.shop_id=o.shop_id
+        left join  address_info a on a.id=o.address_id
+        left  join  delivery_comment dc on dc.order_number = o.order_number
+        <where>
+        1=1
+            <if test="openid !=null and openid!=''">
+                and o.openid =#{openid}
+            </if>
+            <if test="orderId !=null">
+                and o.id=#{orderId}
+            </if>
+            <if test="status == 1">
+                and o.pay_status =1
+            </if>
+            <if test="status == 2">
+              and o.delivery_status &lt;&gt; 3
+            </if>
+            <if test="status == 3">
+            and o.delivery_status = 3
+            </if>
+            <if test="status == 4">
+            and dc.id is null
+            and o.delivery_status = 3
+            </if>
+        </where>
+        order  by o.order_time desc
+    </select>
+
+    <update id="changeOrderStatus" parameterType="com.diane.manage.model.DeliveryShop">
+        update delivery_order
+        <set>
+        <if test="payStatus !=null">
+            pay_status=#{payStatus,jdbcType=TINYINT},
+        </if>
+        <if test="refundNumber !=null and refundNumber !=''">
+            refund_number =#{refundNumber,jdbcType=VARCHAR},
+        </if>
+        <if test="handleStatus !=null">
+            handle_status=#{handleStatus,jdbcType=TINYINT},
+        </if>
+        <if test="deliveryStatus !=null">
+            delivery_status =#{deliveryStatus,jdbcType=TINYINT},
+        </if>
+        <if test="deliveryId !=null">
+            delivery_id =#{deliveryId,jdbcType=BIGINT},
+        </if>
+         <if test="deliveryFee !=null">
+             delivery_fee =#{deliveryFee,jdbcType=SMALLINT}
+        </if>
+        </set>
+        <where>
+            order_number=#{orderNumber,jdbcType=VARCHAR}
+        </where>
+    </update>
+
+    <select id="showGoodLabelPrice" parameterType="com.diane.manage.model.OrderGood" resultType="java.lang.Integer">
+            select label_price from good_label
+            <where>
+                <if test="labelId !=null">
+                    id=#{labelId}
+                </if>
+            </where>
+    </select>
+    <select id="showGoodPrice" parameterType="com.diane.manage.model.OrderGood" resultType="java.lang.Integer">
+        select price from good_info where id=#{goodId}
+    </select>
+
+
+    <select id="deliveryOrderDetail"  resultMap="OrderGoodResultMap" parameterType="java.lang.Long">
+        select o.id order_id, o.order_number,o.amount,o.pay_amount,o.order_time,o.pay_status,o.delivery,shop.shop_id,
+        shop.shop_name,shop.picture_url,a.address_name,a.contact,a.phone,o.handle_status,o.delivery_status
+        from  delivery_order o
+        left join (select s.id shop_id, s.shop_name, p.picture_url from shop_info s  left join picture_info p on p.shop_id=s.id ) shop
+        on shop.shop_id=o.shop_id
+        left join  address_info a on a.id=o.address_id
+        <where>
+            o.id=#{orderId}
+        </where>
+    </select>
+
+    <select id="deliveryOrderDetailByNumber"  resultMap="OrderGoodResultMap" parameterType="java.lang.String">
+        select o.id order_id, o.order_number,o.amount,o.pay_amount,o.order_time,o.pay_status,o.delivery,shop.shop_id,
+        shop.shop_name,shop.picture_url,a.address_name,a.contact,a.phone
+        from  delivery_order o
+        left join (select s.id shop_id, s.shop_name, p.picture_url from shop_info s  left join picture_info p on p.shop_id=s.id ) shop
+        on shop.shop_id=o.shop_id
+        left join  address_info a on a.id=o.address_id
+        <where>
+            o.order_number=#{orderNumber}
+        </where>
+    </select>
+
+    <select id="listOrderByShop" parameterType="com.diane.manage.vo.order.OrderQueryInfo" resultMap="ShopOrderResultMap">
+        select o.id, o.order_number,o.pay_status,o.amount,o.order_time,o.delivery,a.contact,a.phone,
+        a.address_name,s.shop_name,s.pack_charges,t.times,c.counts
+        from delivery_order o
+        left join address_info a on a.id=o.address_id
+        left join  shop_info s on s.id=o.shop_id
+        left join  (select count(openid) times,openid from delivery_order group by openid) t on t.openid=o.openid
+        left join  (select o.id,count(g.good_id) counts  from delivery_order o
+        left join order_good g on o.id=g.order_id
+        group by g.order_id) c on c.id=o.id
+        <where>
+        1=1
+        <if test="companyId !=null">
+        and s.company_id=#{companyId}
+        </if>
+        <if test="shopId !=null">
+        and   o.shop_id=#{shopId}
+        </if>
+        <if test="status !=null">
+        and o.pay_status =#{status}
+        </if>
+        <if test="appointment !=null">
+        and o.appointment=#{appointment}
+        </if>
+        <if test="startTime != null">
+        and o.order_time &gt;= #{startTime}
+        </if>
+        <if test="endTime != null">
+        and o.order_time &lt;= #{endTime}
+        </if>
+        </where>
+        order  by o.order_time desc
+    </select>
+
+    <select id="getPayAmountByOrderNumber" parameterType="java.lang.String" resultMap="DeliveryOrderStatusMap">
+    select  o.pay_amount,o.refund_amount,o.pay_status ,s.auto_receipt,o.id order_id,o.shop_id,o.order_number,o.refund_number,
+    o.handle_status,o.delivery_status,o.delivery_fee,o.delivery_id,s.company_id,o.amount
+    from delivery_order o
+    left join shop_info s on o.shop_id=s.id
+    where order_number=#{orderNumber}
+    </select>
+
+    <select id="findDeliveryStatus" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select delivery_status delivery from delivery_order where order_number=#{orderNumber}
+    </select>
+    <update id="manageDeliveryStatus" >
+        update delivery_order
+        <set>
+        <if test="deliveryStatus !=null">
+            delivery_status=#{deliveryStatus,jdbcType=TINYINT},
+        </if>
+        <if test="deliveryId">
+            delivery_id=#{deliveryId,jdbcType=BIGINT}
+        </if>
+        </set>
+        <where>
+            order_number=#{orderNumber,jdbcType=VARCHAR}
+        </where>
+    </update>
+    
+    <update id="remindOrder" parameterType="java.lang.String">
+        update delivery_order set is_remind = 1 where order_number = #{orderNumber}
+    </update>
+
+    <select id="findOrderIncome" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        SELECT sum(pay_amount) FROM diane.delivery_order where shop_id=#{shopId}
+    </select>
+    
+    <select id="deliveryStatistics" resultMap="StatisticsDelivery">
+        select DATE_FORMAT(order_time,'%Y-%m-%d')  count_delivery_time, sum(CASE delivery_status WHEN 3 THEN 1 ELSE 0 END) success_number,
+        sum(IFNULL(delivery_fee,0)) total_delivery_fee ,count(*) total_number,sum(CASE delivery_status WHEN 3 THEN 0 ELSE 1 END) fail_number
+        from delivery_order
+        where delivery_id=#{deliveryId} and DATE_FORMAT(order_time,'%Y-%m') =#{deliveryTime}
+        group by DATE_FORMAT(order_time,'%Y-%m-%d')
+    </select>
+
+    <select id="findSuccessNumber" resultType="java.lang.Integer">
+         SELECT count(*) total_delivery_number
+        FROM diane.delivery_order
+        where delivery_id=#{deliveryId}
+        and delivery_status=3
+        and  DATE_FORMAT(order_time,'%Y-%m-%d') =#{deliveryTime}
+    </select>
+
+    <update id="dispatchDelivery" parameterType="com.diane.manage.vo.shop.ShopDispatchVo">
+        update delivery_order set delivery_id=#{deliveryId},delivery_status=1 where order_number=#{orderNum}
+    </update>
+    
+    <select id="shopStatistics" parameterType="com.diane.manage.vo.shop.ShopStatisticsVo" resultMap="ShopStatisticsResultMap">
+        select sum(r.shop_reward)turn_over,count(*) order_number,d.shop_id,sum(CASE  WHEN d.pay_status &gt;1 THEN 1 ELSE 0 END) income_number ,
+        sum(CASE  WHEN d.handle_status =5 THEN 1 ELSE 0 END) success_count,
+        sum(CASE  WHEN d.handle_status &gt; 1 and d.handle_status &gt;&lt; 5 THEN 1 ELSE 0 END) fail_count,
+        sum(d.refund_amount) refund
+        from delivery_order d , revenue_statistics r
+        <where>
+            d.order_number=r.order_number
+            <if test="companyId !=null">
+                and r.company_id=#{companyId}
+            </if>
+            <if test="shopId !=null ">
+                and d.shop_id=#{shopId}
+            </if>
+        <![CDATA[   and DATE_FORMAT(d.order_time, '%Y-%m-%d')>=  DATE_FORMAT(#{beginTime}, '%Y-%m-%d')   ]]>
+        <![CDATA[  and DATE_FORMAT(d.order_time, '%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')    ]]>
+            <if test="orderStatus ==1">
+              and d.handle_status = 5
+            </if>
+            <if test="orderStatus ==2">
+                and d.handle_status &lt;5
+                and d.handle_status &gt; 1
+            </if>
+            <if test="orderStatus ==3">
+                and d.refund_amount is not  null
+            </if>
+            <if test="orderType ==1">
+                and d.delivery = 1
+            </if>
+            <if test="orderType ==2">
+                and d.delivery = 0
+            </if>
+
+        </where>
+
+    </select>
+
+    <select id="managerShopStatistics" parameterType="com.diane.manage.vo.shop.ShopStatisticsVo" resultMap="ShopStatisticsResultMap">
+        select sum(r.shop_reward)turn_over,count(*) order_number,d.shop_id,sum(CASE  WHEN d.pay_status &gt;1 THEN 1 ELSE 0 END) income_number ,
+        sum(CASE  WHEN d.handle_status =5 THEN 1 ELSE 0 END) success_count,
+        sum(CASE  WHEN d.handle_status &gt; 1 and d.handle_status &lt;&gt; 5 THEN 1 ELSE 0 END) fail_count,
+        sum(d.refund_amount) refund,s.shop_name,s.company_name
+        from delivery_order d , revenue_statistics r,
+        (select shop.id,shop.shop_name,company.company_name from shop_info shop,company_info company where shop.company_id=company.id ) s
+        <where>
+            d.order_number=r.order_number
+            <if test="regionId !=null">
+                and d.region_id = #{regionId}
+            </if>
+            <if test="companyId !=null">
+                and r.company_id=#{companyId}
+            </if>
+            <if test="shopId !=null ">
+                and d.shop_id=#{shopId}
+            </if>
+            <if test="beginTime !=null and beginTime !='' ">
+             and DATE_FORMAT(d.order_time, '%Y-%m-%d') gte DATE_FORMAT(#{beginTime}, '%Y-%m-%d')
+            </if>
+            <if test="endTime !=null and endTime !='' ">
+              and DATE_FORMAT(d.order_time, '%Y-%m-%d') lte DATE_FORMAT(#{endTime}, '%Y-%m-%d')
+            </if>
+            <if test="orderStatus ==1">
+              and d.handle_status = 5
+            </if>
+            <if test="orderStatus ==2">
+            and d.handle_status &lt;5
+            and d.handle_status &gt; 1
+            </if>
+            <if test="orderStatus ==3">
+                and d.refund_amount is not  null
+            </if>
+            <if test="orderType ==1">
+                and d.delivery = 1
+            </if>
+            <if test="orderType ==2">
+                and d.delivery = 0
+            </if>
+            group  by d.shop_id
+
+        </where>
+
+    </select>
+
+    <select id="findUnPayAmount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select  amount from delivery_order where order_number=#{orderNumber}
+    </select>
+
+
+</mapper>

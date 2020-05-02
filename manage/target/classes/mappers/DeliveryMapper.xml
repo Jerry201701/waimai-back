@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.DeliveryMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.model.Delivery">
+        <id column="id" jdbcType="BIGINT" property="deliveryId" />
+        <result column="user_id" jdbcType="BIGINT" property="userId" />
+        <result column="delivery_name" jdbcType="VARCHAR" property="deliveryName" />
+        <result column="delivery_status" jdbcType="TINYINT" property="status" />
+        <result column="delivery_address" jdbcType="VARCHAR" property="deliveryAddress" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="region_id" jdbcType="BIGINT" property="regionId" />
+        <result column="phone" jdbcType="VARCHAR" property="deliveryPhone" />
+        <result column="grab_number" jdbcType="INTEGER" property="grabNumber" />
+        <result column="delivery_success" jdbcType="INTEGER" property="finishOrder" />
+        <result column="delivery_fail" jdbcType="INTEGER" property="fail" />
+        <result column="balance" jdbcType="INTEGER" property="withdrawableAmount" />
+    </resultMap>
+
+    <resultMap id="DeliverOrderListMap" type="com.diane.manage.vo.delivery.DeliveryOrderRespVo">
+        <result column="order_number" jdbcType="VARCHAR" property="orderNumber" />
+        <result column="order_time" jdbcType="TIMESTAMP" property="orderTime" />
+        <result column="order_status" jdbcType="VARCHAR" property="orderStatus" />
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+        <!--        <result column="shop_distance" jdbcType="BIGINT" property="shopDistance" />-->
+        <result column="shop_address" jdbcType="VARCHAR" property="shopAddress" />
+        <result column="shop_phone" jdbcType="VARCHAR" property="shopPhone" />
+        <result column="receiver" jdbcType="VARCHAR" property="receiver" />
+        <result column="receiver_phone" jdbcType="VARCHAR" property="receiverPhone" />
+        <result column="address" jdbcType="VARCHAR" property="receiverAddress" />
+        <!--        <result column="distance" jdbcType="BIGINT" property="receiverDistance" />-->
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+    id, user_id, phone,  create_by, create_time, last_update_by, last_update_time,flag,remark,delivery_name ,openid
+  </sql>
+
+
+    <insert id="insertSelective" parameterType="com.diane.manage.model.Delivery" useGeneratedKeys="true" keyProperty="deliveryId">
+        insert into delivery
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deliveryName != null and deliveryName!=''">
+                delivery_name,
+            </if>
+            <if test="userId != null and userId!=''">
+                user_id,
+            </if>
+            <if test="regionId != null ">
+                region_id,
+            </if>
+            <if test="createBy != null and createBy !=''">
+                create_by,
+            </if>
+            <if test="createTime != null ">
+                create_time,
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!=''">
+                last_update_by,
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+            <if test="status != null">
+                delivery_status,
+            </if>
+            <if test="remark != null and remark !=''">
+                remark,
+            </if>
+            <if test="deliveryAddress != null and deliveryAddress !=''">
+                delivery_address,
+            </if>
+             <if test="deliveryPhone != null and deliveryPhone !=''">
+                delivery_phone,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deliveryName != null and deliveryName!=''">
+                #{deliveryName},
+            </if>
+            <if test="userId != null and userId!=''">
+                #{userId},
+            </if>
+            <if test="regionId != null ">
+                #{regionId},
+            </if>
+            <if test="createBy != null and createBy !=''">
+                #{createBy},
+            </if>
+            <if test="createTime != null ">
+                #{createTime},
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!=''">
+                #{lastUpdateBy},
+            </if>
+            <if test="lastUpdateTime != null ">
+                #{lastUpdateTime},
+            </if>
+            <if test="flag != null">
+                #{flag},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="remark != null and remark !=''">
+                #{remark},
+            </if>
+            <if test="deliveryAddress != null and deliveryAddress !=''">
+                #{delivery_address},
+            </if>
+            <if test="deliveryPhone != null and deliveryPhone !=''">
+                #{deliveryPhone},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="findPage" resultMap="BaseResultMap">
+        select   d.id, d.user_id, u.name phone,  d.create_by, d.create_time, d.remark,d.delivery_name,d.delivery_status
+        from delivery d
+        left join sys_user u on d.user_id=u.id
+    </select>
+
+    <select id="findDeliveryByRegion" resultMap="BaseResultMap">
+        select   d.id, d.user_id, u.name phone,  d.create_by, d.create_time, d.remark,d.delivery_name,d.delivery_status
+        from delivery d
+        left join sys_user u on d.user_id=u.id
+        <where>
+            d.region_id=#{regionId}
+            <if test="type ==1">
+            and d.id not in (select delivery_id from white_list_delivery  where shop_id=#{shopId} and flag =1 )
+            </if>
+            <if test="keyWord !=null and keyWord !=''">
+                <bind name="keyWord" value="'%' + keyWord + '%'"/>
+                and d.delivery_phone like CONCAT('%',#{keyWord},'%')
+            </if>
+        </where>
+
+    </select>
+
+
+
+    <select id="findUserIdByDelivery" parameterType="java.lang.Long" resultType="java.lang.Long">
+        select user_id from delivery where id=#{shopId}
+    </select>
+
+
+    <!--    <select id="findPageConditions" resultMap="BaseResultMap">-->
+    <!--        select-->
+    <!--        <include refid="Base_Column_List" />-->
+    <!--        from delivery-->
+    <!--        <where>-->
+    <!--            <if test="regionId !=null">-->
+    <!--                and region_id=#{regionId,jdbcType=BIGINT}-->
+    <!--            </if>-->
+    <!--            <if test="id !=null">-->
+    <!--                and id =#{id,jdbcType=BIGINT}-->
+    <!--            </if>-->
+    <!--            <if test="userId !=null">-->
+    <!--                and user_id =#{userId,jdbcType=BIGINT}-->
+    <!--            </if>-->
+    <!--        </where>-->
+    <!--    </select>-->
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.diane.manage.model.Delivery">
+        update delivery
+        <set>
+            <if test="deliveryName != null and deliveryName!=''">
+                delivery_name= #{deliveryName},
+            </if>
+            <if test="userId != null and userId!=''">
+                user_id= #{userId},
+            </if>
+            <if test="regionId != null ">
+                region_id= #{regionId},
+            </if>
+            <if test="createBy != null and createBy !=''">
+                create_by=  #{createBy},
+            </if>
+            <if test="createTime != null ">
+                create_time=  #{createTime},
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!=''">
+                last_update_by= #{lastUpdateBy},
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time= #{lastUpdateTime},
+            </if>
+            <if test="flag != null">
+                flag=  #{flag},
+            </if>
+            <if test="status != null">
+                delivery_status =#{status},
+            </if>
+            <if test="remark != null and remark !=''">
+                remark =#{remark},
+            </if>
+            <if test="deliveryAddress != null and deliveryAddress !=''">
+                delivery_address =#{deliveryAddress},
+            </if>
+        </set>
+        where id = #{deliveryId,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteDelivery" parameterType="com.diane.manage.model.Delivery">
+        update delivery
+        <set>
+            flag=0
+        </set>
+        where id = #{deliveryId}
+    </update>
+
+    <select id="showDeliveryInfoById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select d.delivery_name,d.delivery_status,d.id,d.region_id,d.remark,d.user_id,w.balance,s.delivery_success,s.delivery_fail,s.grab_number
+        from delivery d
+        left join wallet w on w.delivery_id=d.id
+        left join  (select delivery_id,sum(case delivery_status when 3 then 1 else 0 end ) delivery_success,
+        sum(case delivery_status when 4 then 1 else 0 end ) delivery_fail,
+        sum(case when delivery_status >=1 then 1 else 0 end ) grab_number
+        from delivery_order
+        where delivery_id=#{deliveryId}) s on d.id=s.delivery_id
+        <where>
+            d.id=#{deliveryId,jdbcType=BIGINT}
+        </where>
+    </select>
+
+
+
+
+</mapper>

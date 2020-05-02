@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.CategoryInfoMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.model.CategoryInfo">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="label" jdbcType="VARCHAR" property="label" />
+        <result column="region_id" jdbcType="VARCHAR" property="regionId" />
+        <result column="region_name" jdbcType="VARCHAR" property="regionName" />
+        <result column="create_by" jdbcType="BIGINT" property="createBy" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="last_update_by" jdbcType="BIGINT" property="lastUpdateBy" />
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="flag" jdbcType="TINYINT" property="flag" />
+        <result column="logo_url" jdbcType="VARCHAR" property="logoUrl" />
+    </resultMap>
+
+    <resultMap id="CopyResultMap" type="com.diane.manage.vo.category.CopyCategoryVo">
+        <result column="source_id" jdbcType="BIGINT" property="sourceId" />
+        <result column="target_id" jdbcType="BIGINT" property="targetId" />
+        <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    </resultMap>
+
+
+
+
+    <sql id="Base_Column_List">
+    id, category_name, label, create_by, create_time, last_update_by, last_update_time,
+    flag,remark,logo_url
+  </sql>
+
+
+    <insert id="insertSelective" parameterType="com.diane.manage.model.CategoryInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into delivery_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="categoryName != null">
+                category_name,
+            </if>
+             <if test="logoUrl != null and logoUrl !=''">
+                logo_url,
+            </if>
+            <if test="label != null and label !=''">
+                label,
+            </if>
+            <if test="remark != null and remark!=''">
+                remark,
+            </if>
+            <if test="createBy != null and createBy !=''">
+                create_by,
+            </if>
+            <if test="createTime != null ">
+                create_time,
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!=''">
+                last_update_by,
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+             <if test="categoryType != null">
+                category_type,
+            </if>
+            <if test="shopId != null">
+                shop_id,
+            </if>
+             <if test="regionId != null">
+                region_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="categoryName != null">
+                #{categoryName},
+            </if>
+            <if test="logoUrl != null and logoUrl !=''">
+                #{logoUrl},
+            </if>
+            <if test="label != null and label!=''">
+                #{label},
+            </if>
+            <if test="remark != null and remark!=''">
+                #{remark},
+            </if>
+            <if test="createBy != null and createBy !=''">
+                #{createBy},
+            </if>
+            <if test="createTime != null ">
+                #{createTime},
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!=''">
+                #{lastUpdateBy},
+            </if>
+            <if test="lastUpdateTime != null ">
+                #{lastUpdateTime},
+            </if>
+            <if test="flag != null">
+                #{flag},
+            </if>
+                <if test="categoryType != null">
+                #{categoryType},
+            </if>
+             <if test="shopId != null">
+                #{shopId},
+            </if>
+             <if test="regionId != null">
+                #{regionId},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="findPage" resultMap="BaseResultMap" >
+        select d.category_name,r.region_name,d.create_time,d.remark
+        from delivery_category d
+        left join delivery_region r on d.region_id = r.id
+        where shop_id is null
+        and region_id is not null
+    </select>
+
+    <select id="findPageByRegion" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select d.category_name,r.region_name,d.create_time,d.remark
+        from delivery_category d
+        left join delivery_region r on d.region_id = r.id
+        where shop_id is null
+        and region_id =#{regionId}
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.diane.manage.model.CategoryInfo">
+        update delivery_category
+        <set>
+            <if test="categoryName != null and categoryName !=''">
+                category_name= #{categoryName,jdbcType=VARCHAR},
+            </if>
+            <if test="label != null and label!=''">
+                label= #{label,},
+            </if>
+             <if test="logoUrl != null and logoUrl!=''">
+                logo_url= #{logoUrl},
+            </if>
+            <if test="remark != null and remark!=''">
+                remark= #{remark},
+            </if>
+            <if test="createBy != null and createBy !=''">
+                create_by= #{createBy},
+            </if>
+            <if test="createTime != null ">
+                create_time= #{createTime},
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!=''">
+                last_update_by=  #{lastUpdateBy},
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time=  #{lastUpdateTime},
+            </if>
+            <if test="flag != null">
+                flag=  #{flag},
+            </if>
+            <if test="categoryType != null">
+               category_type= #{categoryType},
+            </if>
+            <if test="shopId != null">
+               shop_id = #{shopId},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteCategory" parameterType="com.diane.manage.model.CategoryInfo">
+        update delivery_category
+        <set>
+            flag=0
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="listCategory" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select id,category_name from  delivery_category
+        where  shop_id = #{shopId} and flag =0
+    </select>
+
+    <select id="findCategoryByRegion" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select id,category_name,region_id from delivery_category
+        <where>
+            1=1
+            <if test="regionId !=null">
+                and region_id=#{regionId,jdbcType=BIGINT}
+            </if>
+        </where>
+    </select>
+
+    <insert id="copyGoodCategory" parameterType="com.diane.manage.vo.shop.ShopReqVo">
+    insert into delivery_category (category_name,create_time,flag,shop_id,source_category_id)
+    SELECT category_name,#{createTime},0,#{shopId},id FROM delivery_category where shop_id=#{coneShopId};
+    </insert>
+
+
+    <select id="listSourceByShop" parameterType="java.lang.Long" resultMap="CopyResultMap">
+        select id target_id,source_category_id source_id,shop_id  from delivery_category where  shop_id=#{shopId}
+    </select>
+
+
+</mapper>

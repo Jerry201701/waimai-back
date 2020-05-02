@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.BargainActivityMapper">
+    <resultMap id="BargainActivityResultMap" type="com.diane.manage.vo.activity.BargainActivityRespVo">
+        <result column="id" jdbcType="BIGINT" property="id" />
+        <result column="good_id" jdbcType="BIGINT" property="goodId" />
+        <result column="activity_id" jdbcType="BIGINT" property="activityId" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="end_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="current_price" jdbcType="BIGINT" property="currentPrice" />
+        <result column="good_price" jdbcType="BIGINT" property="goodPrice" />
+        <result column="good_name" jdbcType="VARCHAR" property="goodName" />
+        <result column="bargain_validity" jdbcType="BIGINT" property="validityTime" />
+        <collection property="goodPic" ofType="java.lang.String">
+            <constructor>
+                <arg column="pic" />
+            </constructor>
+        </collection>
+    </resultMap>
+
+
+
+    <insert id="addBargainActivity" parameterType="com.diane.manage.model.BargainActivity" useGeneratedKeys="true" keyProperty="id">
+        insert into bargain_activity
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="openid != null and openid!=''">
+                openid,
+            </if>
+             <if test="currentPrice != null ">
+                current_price,
+            </if>
+            <if test="goodId != null ">
+                good_id,
+            </if>
+            <if test="activityId != null ">
+                activity_id,
+            </if>
+            <if test="createTime != null ">
+                create_time,
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="openid != null and openid!=''">
+                #{openid},
+            </if>
+            <if test="currentPrice != null ">
+                #{currentPrice},
+            </if>
+            <if test="goodId != null ">
+                #{goodId},
+            </if>
+            <if test="activityId != null ">
+                #{activityId},
+            </if>
+            <if test="createTime != null ">
+                #{createTime},
+            </if>
+            <if test="lastUpdateTime != null ">
+                #{lastUpdateTime},
+            </if>
+        </trim>
+    </insert>
+    
+    <select id="findBargainActivityByPage" parameterType="java.lang.String" resultMap="BargainActivityResultMap">
+        select  ba.id ,ba.good_id,ba.openid,ba.activity_id,ba.current_price,ba.create_time,good.good_name,good.good_price,
+        good.pic,m.bargain_validity
+        from bargain_activity ba
+        left join (select g.id ,g.price good_price,g.good_name,p.picture_url pic from good_info g,picture_info p where g.id=p.good_id)good on good.id=ba.good_id
+        left join market_activity m on m.id=ba.activity_id
+
+    </select>
+
+    <update id="changeBargainPrice" >
+        update bargain_activity  set current_price = #{currentPrice} where id=#{bargainId}
+    </update>
+    
+    <select id="findBargainById" parameterType="java.lang.Long" resultMap="BargainActivityResultMap">
+        select good.price good_price,record.bargain_price current_price from bargain_activity ba
+        left join  good_info good on ba.good_id=good.id
+        left join  bargain_record record on record.bargain_id=ba.id
+        where id=#{bargainId}
+    </select>
+    <select id="findOpenid" parameterType="java.lang.Long" resultType="java.lang.String">
+        select distinct openid from bargain_record where bargain_id=#{bargainId}
+        union
+        select openid from bargain_activity where id=#{bargainId}
+
+    </select>
+
+</mapper>

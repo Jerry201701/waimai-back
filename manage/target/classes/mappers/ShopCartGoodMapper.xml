@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.ShopCartGoodMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.vo.AddressQuery">
+        <result column="id" jdbcType="BIGINT" property="id" />
+        <result column="shop_cart_id" jdbcType="VARCHAR" property="shopCartId"/>
+        <result column="good_id" jdbcType="VARCHAR" property="goodId" />
+        <result column="quantity" jdbcType="BIGINT" property="quantity" />
+        <result column="flag" jdbcType="TINYINT" property="flag" />
+    </resultMap>
+
+
+
+    <insert id="insertSelective" parameterType="com.diane.manage.model.ShopCartGood" useGeneratedKeys="true" keyProperty="id">
+        insert into shop_cart_good
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shopCartId != null ">
+                shop_cart_id,
+            </if>
+            <if test="goodId != null ">
+                good_id,
+            </if>
+            <if test="quantity != null ">
+                quantity,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="shopCartId != null ">
+                #{shopCartId},
+            </if>
+            <if test="goodId != null ">
+                #{goodId},
+            </if>
+            <if test="quantity != null ">
+                #{quantity},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.diane.manage.vo.AddressQuery">
+        update address_info
+        <set>
+            <if test="shopCartId != null ">
+              shop_cart_id=  #{shopCartId},
+            </if>
+            <if test="goodId != null ">
+                good_id = #{goodId},
+            </if>
+            <if test="quantity != null ">
+                quantity= #{quantity},
+            </if>
+            <if test="">
+
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <delete id="removeCartInfo" parameterType="com.diane.manage.model.ShopCart">
+        delete from shop_cart_good where shop_cart_id=#{cart} and good_id=#{goodId}
+    </delete>
+
+
+
+
+</mapper>

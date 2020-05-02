@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.PictureMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.model.PictureInfo">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="picture_desc" jdbcType="VARCHAR" property="pictureDesc" />
+        <result column="picture_url" jdbcType="VARCHAR" property="pictureUrl" />
+        <result column="picture_type" jdbcType="TINYINT" property="pictureType" />
+        <result column="create_by" jdbcType="BIGINT" property="createBy" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="last_update_by" jdbcType="BIGINT" property="lastUpdateBy" />
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="flag" jdbcType="TINYINT" property="Flag" />
+        <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+        <result column="good_id" jdbcType="BIGINT" property="goodId" />
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, picture_url, picture_type, picture_desc, create_by, create_time, last_update_by, last_update_time,
+    flag
+  </sql>
+
+
+    <insert id="insertSelective" parameterType="com.diane.manage.model.PictureInfo">
+        insert into picture_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="pictureDesc != null and pictureDesc!=''">
+                picture_desc,
+            </if>
+            <if test="pictureUrl != null and pictureUrl!=''">
+                picture_url,
+            </if>
+            <if test="pictureType != null ">
+                picture_type,
+            </if>
+            <if test="shopId != null ">
+                shop_id,
+            </if>
+            <if test="createBy != null ">
+                create_by,
+            </if>
+            <if test="createTime != null ">
+                create_time,
+            </if>
+            <if test="lastUpdateBy != null ">
+                last_update_by,
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+             <if test="goodId != null">
+                good_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="pictureDesc != null and pictureDesc!=''">
+                #{pictureDesc},
+            </if>
+            <if test="pictureUrl != null and pictureUrl!=''">
+                #{pictureUrl},
+            </if>
+            <if test="pictureType != null ">
+                #{pictureType},
+            </if>
+            <if test="shopId != null ">
+                #{shopId},
+            </if>
+            <if test="createBy != null ">
+                #{createBy},
+            </if>
+            <if test="createTime != null ">
+                #{createTime},
+            </if>
+            <if test="lastUpdateBy != null ">
+              #{lastUpdateBy},
+            </if>
+            <if test="lastUpdateTime != null ">
+              #{lastUpdateTime},
+            </if>
+            <if test="flag != null">
+                #{flag},
+            </if>
+             <if test="goodId != null">
+                #{goodId},
+            </if>
+        </trim>
+    </insert>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.diane.manage.model.PictureInfo">
+        update picture_info
+        <set>
+            <if test="pictureDesc != null and pictureDesc!=''">
+                picture_desc =   #{pictureDesc},
+            </if>
+            <if test="pictureUrl != null and pictureUrl!=''">
+                picture_url =  #{pictureUrl},
+            </if>
+            <if test="pictureType != null ">
+                picture_type =  #{pictureType},
+            </if>
+            <if test="shopId != null ">
+                shop_id =  #{shopId},
+            </if>
+            <if test="createBy != null ">
+                create_by =  #{createBy},
+            </if>
+            <if test="createTime != null ">
+                create_time = #{createTime},
+            </if>
+            <if test="lastUpdateBy != null ">
+                last_update_by = #{lastUpdateBy},
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time = #{lastUpdateTime},
+            </if>
+            <if test="flag != null">
+               flag = #{flag},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        insert into picture_info (picture_desc,flag,create_time,last_update_time,create_by,last_update_by,picture_url,picture_type,use_id)
+        VALUES
+        <foreach collection="list" index="index" item="picture" separator=",">
+            (
+            #{picture.pictureDesc},#{picture.flag},#{picture.createTime},#{picture.lastUpdateTime},
+            #{picture.createBy},#{picture.lastUpdateBy},#{picture.pictureUrl},#{picture.pictureType},#{picture.useId}
+            )
+        </foreach>
+    </insert>
+
+    <select id="listPictureByShop" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select id ,picture_desc,picture_url,picture_type,shop_id from picture_info where shop_id=#{shopId}
+    </select>
+
+    <select id="listPictureByGood" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select id ,picture_desc,picture_url,picture_type,good_id from picture_info where good_id=#{goodId}
+    </select>
+    <delete id="deletePictureUrlById" parameterType="java.lang.Long">
+        delete from picture_info where id =#{id}
+
+    </delete>
+
+    <insert id="copyGoodPicture" parameterType="com.diane.manage.vo.good.CopyGoodVo">
+    insert into picture_info (good_id,flag,create_time,picture_url)
+    SELECT #{targetGoodId},#{flag},#{createTime},picture_url FROM picture_info where good_id=#{sourceGoodId};
+    </insert>
+
+    <delete id="movePictureByGood" parameterType="java.lang.Long">
+        delete from picture_info where good_id=#{goodId}
+
+    </delete>
+
+
+
+
+</mapper>

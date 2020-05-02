@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.AssembleActivityMapper">
+    <resultMap id="AssembleResultMap" type="com.diane.manage.vo.activity.AssembleActivityRespVo">
+        <result column="min_people" jdbcType="INTEGER" property="minPeople" />
+        <result column="group_validity_time" jdbcType="INTEGER" property="groupValidityTime" />
+        <result column="assemble_times" jdbcType="INTEGER" property="assembleTimes" />
+        <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+<!--        <collection property="userPicUrl" ofType="java.lang.String">-->
+<!--            <constructor>-->
+<!--                <arg column="head_icon" />-->
+<!--            </constructor>-->
+<!--        </collection>-->
+    </resultMap>
+
+    <resultMap id="CreateAssembleResultMap" type="com.diane.manage.vo.activity.CreateAssembleVo">
+        <result column="min_people" jdbcType="INTEGER" property="minPeople" />
+        <result column="group_validity_time" jdbcType="INTEGER" property="groupValidityTime" />
+        <result column="assemble_times" jdbcType="INTEGER" property="assembleTimes" />
+        <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+        <result column="assemble_id" jdbcType="BIGINT" property="assembleId" />
+        <result column="head_icon" jdbcType="VARCHAR" property="userPicUrl" />
+        <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    </resultMap>
+
+
+    <insert id="addAssembleActivity" parameterType="com.diane.manage.model.BargainActivity" useGeneratedKeys="true" keyProperty="assembleId">
+        insert into assemble_activity
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="openid != null and openid!=''">
+                openid,
+            </if>
+            <if test="assemblePrice != null ">
+                assemble_price,
+            </if>
+            <if test="goodId != null ">
+                good_id,
+            </if>
+            <if test="activityId != null ">
+                activity_id,
+            </if>
+            <if test="createTime != null ">
+                create_time,
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time,
+            </if>
+             <if test="leader != null ">
+                 leader,
+            </if>
+            <if test="superiorId != null ">
+                superior_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="openid != null and openid!=''">
+                #{openid},
+            </if>
+            <if test="assemblePrice != null ">
+                #{assemblePrice},
+            </if>
+            <if test="goodId != null ">
+                #{goodId},
+            </if>
+            <if test="activityId != null ">
+                #{activityId},
+            </if>
+            <if test="createTime != null ">
+                #{createTime},
+            </if>
+            <if test="lastUpdateTime != null ">
+                #{lastUpdateTime},
+            </if>
+             <if test="leader != null ">
+                #{leader},
+            </if>
+            <if test="superiorId != null ">
+                #{superiorId},
+            </if>
+        </trim>
+    </insert>
+    <select id="findLeaderOpenid" parameterType="java.lang.Long" resultType="java.lang.String">
+        select openid from assemble_activity where id=#{assembleId}
+        union
+        select openid from assemble_activity where superior_id=#{assembleId}
+    </select>
+
+    <select id="listAssembleActivity" parameterType="java.lang.Long" resultMap="CreateAssembleResultMap">
+    select assemble.id assemble_id,wei.head_icon ,wei.nick_name ,m.min_people,m.group_validity_time,assemble.create_time start_time
+    from  assemble_activity assemble
+    left join wei_user_info wei on wei.openid=assemble.openid
+    left join market_activity m on m.id=assemble.activity_id
+    </select>
+
+
+    <select id="findAssembleDetail" parameterType="java.lang.Long" resultMap="AssembleResultMap">
+    select count(a.id) assemble_times, m.min_people,m.group_validity_time,a.create_time start_time
+    from (SELECT id,activity_id,create_time from assemble_activity where id=#{assembleId} or superior_id=#{assembleId})a ,market_activity m
+    where m.id=a.activity_id
+    group by a.activity_id
+    </select>
+
+    <select id="findHeadIcon" parameterType="java.lang.Long" resultType="java.lang.String">
+        select  w.head_icon from  (select id, openid,create_time from assemble_activity where id=1 or superior_id=1) a , wei_user_info w
+        where a.openid=w.openid
+        order by a.create_time
+    </select>
+    
+    <select id="countAssembleNumber" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        select count(*) from assemble_activity where superior_id=#{assembleId}
+    </select>
+
+
+
+
+
+</mapper>

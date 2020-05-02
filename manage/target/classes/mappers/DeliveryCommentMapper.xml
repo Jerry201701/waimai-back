@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.DeliveryCommentMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.vo.comment.CommentRespVo">
+        <result column="total_speed"  property="speed" />
+        <result column="total_attitude"  property="attitude" />
+        <result column="praise"  property="praise" />
+        <result column="middle"  property="middle" />
+        <result column="negative"  property="negative" />
+
+    </resultMap>
+    <resultMap id="CommentResultMap" type="com.diane.manage.vo.comment.CommentPageResultVo">
+        <result column="reply" jdbcType="VARCHAR" property="reply" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="commentTime" />
+        <result column="id" jdbcType="BIGINT" property="commentId" />
+        <result column="content" jdbcType="VARCHAR" property="replyContent" />
+        <result column="level" jdbcType="TINYINT" property="orderLevel" />
+        <result column="nick_name" jdbcType="VARCHAR" property="customerName" />
+        <result column="head_icon" jdbcType="VARCHAR" property="customerPicUrl" />
+
+    </resultMap>
+    <resultMap id="ShopCommentPage" type="com.diane.manage.vo.comment.CommentPageResultVo">
+        <result column="reply" jdbcType="VARCHAR" property="replyContent" />
+        <result column="attitude" jdbcType="TINYINT" property="attitude" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="commentTime" />
+        <result column="id" jdbcType="BIGINT" property="commentId" />
+        <result column="content" jdbcType="VARCHAR" property="commentContent" />
+        <result column="nick_name" jdbcType="VARCHAR" property="customerName" />
+        <result column="head_icon" jdbcType="VARCHAR" property="customerPicUrl" />
+    </resultMap>
+
+
+    <insert id="insertSelective" parameterType="com.diane.manage.model.DeliveryComment" useGeneratedKeys="true" keyProperty="id">
+        insert into delivery_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="speed != null ">
+                speed,
+            </if>
+            <if test="attitude != null ">
+                attitude,
+            </if>
+            <if test="comment != null and comment!=''">
+                content,
+            </if>
+            <if test="openid != null and openid!=''">
+                openid,
+            </if>
+            <if test="shopId != null ">
+                shop_id,
+            </if>
+            <if test="createBy != null and createBy !=''">
+                create_by,
+            </if>
+            <if test="createTime != null ">
+                create_time,
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!=''">
+                last_update_by,
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+             <if test="orderNumber != null">
+                order_number,
+            </if>
+              <if test="praise != null">
+                  praise,
+            </if>
+              <if test="middle != null">
+                  middle,
+            </if>
+              <if test="negative != null">
+                  negative,
+            </if>
+             <if test="anonymous != null">
+                 anonymous,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="speed != null ">
+                #{speed},
+            </if>
+            <if test="attitude != null ">
+                #{attitude},
+            </if>
+            <if test="comment != null and comment!=''">
+                #{comment},
+            </if>
+            <if test="openid != null and openid!=''">
+                #{openid},
+            </if>
+            <if test="shopId != null ">
+                #{shopId},
+            </if>
+            <if test="createBy != null and createBy !=''">
+                #{createBy},
+            </if>
+            <if test="createTime != null ">
+                #{createTime},
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!=''">
+                #{lastUpdateBy},
+            </if>
+            <if test="lastUpdateTime != null ">
+                #{lastUpdateTime},
+            </if>
+            <if test="flag != null">
+                #{flag},
+            </if>
+            <if test="orderNumber != null">
+                #{orderNumber},
+            </if>
+            <if test="praise != null">
+                #{praise},
+            </if>
+            <if test="middle != null">
+                #{middle},
+            </if>
+            <if test="negative != null">
+                #{negative},
+            </if>
+            <if test="anonymous != null">
+                #{anonymous},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="findPage" resultMap="CommentResultMap" >
+        select dc.id,dc.content,dc.reply,dc.create_time,(dc.speed+dc.attitude)/2 level,
+        (CASE dc.anonymous WHEN 0 THEN wei.nick_name ELSE null END) nick_name,
+        (CASE dc.anonymous WHEN 0 THEN wei.head_icon ELSE null END) head_icon
+        from delivery_comment dc
+        left join  wei_user_info wei on wei.openid=dc.openid
+        <where>
+            dc.shop_id=#{shopId}
+            <if test="commentType ==1 ">
+                and dc.praise =1
+            </if>
+             <if test="commentType ==2 ">
+                and dc.middle =1
+            </if>
+             <if test="commentType ==3 ">
+                and dc.negative =1
+            </if>
+        </where>
+
+    </select>
+
+    <select id="countCommentByShop" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT  avg(speed) total_speed,avg(attitude) total_attitude,sum(praise) praise,sum(middle) middle,sum(negative) negative
+        FROM diane.delivery_comment where shop_id=#{shopId};
+    </select>
+
+    <select id="listCommentDetailByShop" parameterType="java.lang.Long" resultType="com.diane.manage.model.DeliveryComment">
+            select openid,content,speed,attitude from delivery_comment where shop_id=#{shopId}
+    </select>
+
+    <update id="commentReply" parameterType="com.diane.manage.vo.comment.CommentQuery">
+        update delivery_comment
+        <set>
+            reply=#{replyContent,jdbcType=VARCHAR}
+        </set>
+        <where>
+            id=#{commentId,jdbcType=BIGINT}
+        </where>
+
+    </update>
+    <select id="shopCommentPageInfo" parameterType="com.diane.manage.vo.comment.CommentQuery" resultMap="ShopCommentPage">
+        SELECT dc.id,dc.content,dc.reply,dc.create_time,(dc.speed+dc.attitude)/2 level,
+        (CASE dc.anonymous WHEN 0 THEN wei.nick_name ELSE null END) nick_name,
+        (CASE dc.anonymous WHEN 0 THEN wei.head_icon ELSE null END) head_icon
+        FROM diane.delivery_comment dc
+        left join  wei_user_info wei on wei.openid=dc.openid
+        <where>
+        <if test="shopId  !=null">
+           and dc.shop_id=#{shopId}
+        </if>
+        <if test="startTime  !=null">
+            and dc.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            and dc.create_time &lt;= #{endTime}
+        </if>
+        <if test="messageType==1">
+            and dc.praise=1
+        </if>
+        <if test="messageType==2">
+            and dc.middle=1
+        </if>
+        <if test="messageType==3">
+            and dc.negative=1
+        </if>
+        <if test="nickName !=null and nickName !=''">
+            <bind name="nickName" value="'%' + nickName + '%'"/>
+            and wei.nick_name like CONCAT('%',#{nickName},'%')
+        </if>
+        </where>
+
+    </select>
+
+</mapper>
+

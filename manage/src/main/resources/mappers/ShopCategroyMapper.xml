@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.ShopCategoryMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.model.CategoryInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="label" jdbcType="VARCHAR" property="label" />
+    <result column="create_by" jdbcType="BIGINT" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="last_update_by" jdbcType="BIGINT" property="lastUpdateBy" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+    <result column="flag" jdbcType="TINYINT" property="flag" />
+    <result column="logo_url" jdbcType="VARCHAR" property="logoUrl" />
+</resultMap>
+    <sql id="Base_Column_List">
+    id, category_name, label, create_by, create_time, last_update_by, last_update_time,
+    flag,remark,logo_url
+  </sql>
+    <resultMap id="CategoryResultMap" type="com.diane.manage.model.CategoryInfo">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="label" jdbcType="VARCHAR" property="label" />
+        <result column="create_by" jdbcType="BIGINT" property="createBy" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="last_update_by" jdbcType="BIGINT" property="lastUpdateBy" />
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="flag" jdbcType="TINYINT" property="flag" />
+        <result column="logo_url" jdbcType="VARCHAR" property="logoUrl" />
+    </resultMap>
+
+
+    <insert id="insertSelective" parameterType="com.diane.manage.model.ShopCategory" useGeneratedKeys="true" keyProperty="id">
+        insert into shop_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="shopId != null">
+                shop_id,
+            </if>
+            <if test="categoryId !=null">
+                category_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="shopId != null">
+                #{shopId},
+            </if>
+            <if test="categoryId !=null">
+                #{categoryId},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="findPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from delivery_category
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.diane.manage.model.ShopCategory">
+        update shop_category
+        <set>
+            <if test="shopId != null">
+              shop_id =  #{shopId},
+            </if>
+            <if test="categoryId !=null">
+              category_id =  #{categoryId},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+<!--    <update id="deleteCategory" parameterType="com.diane.manage.model.CategoryInfo">-->
+<!--        update shop_category-->
+<!--        <set>-->
+<!--            flag=0-->
+<!--        </set>-->
+<!--        where id = #{id}-->
+<!--    </update>-->
+
+    <select id="listCategoryByShop" parameterType="java.lang.Long" resultMap="CategoryResultMap">
+        select category_id id,c.category_name from shop_category sc
+        left join delivery_category c on sc.category_id=c.id
+        where sc.shop_id=#{shopId,jdbcType=BIGINT}
+    </select>
+
+
+
+
+
+
+</mapper>

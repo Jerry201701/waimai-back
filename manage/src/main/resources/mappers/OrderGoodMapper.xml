@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.OrderGoodMapper">
+        <resultMap id="BaseResultMap" type="com.diane.manage.vo.order.QueryGoodResp">
+            <result column="good_id" jdbcType="VARCHAR" property="goodId" />
+            <result column="label_id" jdbcType="VARCHAR" property="labelId" />
+            <result column="good_name" jdbcType="VARCHAR" property="goodName" />
+            <result column="label_name" jdbcType="BIGINT" property="labelName" />
+            <result column="quantity" jdbcType="TIMESTAMP" property="quantity" />
+            <result column="price" jdbcType="BIGINT" property="price" />
+            <collection property="goodPic" ofType="java.lang.String">
+                <constructor>
+                    <arg column="picture_url" />
+                </constructor>
+            </collection>
+        </resultMap>
+
+
+    <resultMap id="OrderGoodMap" type="com.diane.manage.vo.delivery.DeliveryGoodVo">
+        <result column="price" jdbcType="BIGINT" property="price" />
+        <result column="quantity" jdbcType="BIGINT" property="quantity" />
+        <result column="good_name" jdbcType="VARCHAR" property="goodName" />
+        <result column="label_name" jdbcType="VARCHAR" property="labelName" />
+    </resultMap>
+
+    <insert id="insertSelective" parameterType="com.diane.manage.model.ShopGood" useGeneratedKeys="true" keyProperty="id">
+        insert into order_good
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">
+                order_id,
+            </if>
+            <if test="goodId !=null">
+                good_id,
+            </if>
+             <if test="labelId !=null">
+                label_id,
+            </if>
+            <if test="orderNumber !=null">
+                order_number,
+            </if>
+            <if test="quantity !=null">
+                quantity,
+            </if>
+             <if test="createTime !=null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">
+                #{orderId},
+            </if>
+            <if test="goodId !=null">
+                #{goodId},
+            </if>
+            <if test="labelId !=null">
+                #{labelId},
+            </if>
+             <if test="orderNumber !=null">
+                #{orderNumber},
+            </if>
+             <if test="quantity !=null">
+                #{quantity},
+            </if>
+            <if test="createTime !=null">
+                createTime,
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.diane.manage.model.OrderGood">
+        update shop_good
+        <set>
+            <if test="orderId != null">
+              order_id=  #{orderId},
+            </if>
+            <if test="goodId !=null">
+                good_id =#{goodId},
+            </if>
+            <if test="labelId !=null">
+                label_id =#{labelId},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="listGoodByOrder" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select o.label_id,o.quantity,o.good_id,l.label_name,g.good_name,g.price,g.picture_url
+        from order_good o
+        left join (select good.id,good.good_name,good.price,picture.picture_url from  good_info good left join picture_info picture
+        on good.id=picture.good_id) g on o.good_id=g.id
+        left  join  good_label l on o.label_id=l.id
+        <where>
+        o.order_id=#{orderId}
+        </where>
+    </select>
+
+
+    <select id="listOrderGood" parameterType="java.lang.Long" resultMap="OrderGoodMap">
+        select o.quantity,l.label_name,g.good_name,g.price
+        from order_good o
+        left join  good_info   g on o.good_id=g.id
+        left  join  good_label l on o.label_id=l.id
+        <where>
+            o.order_id=#{orderId}
+        </where>
+    </select>
+
+
+
+</mapper>

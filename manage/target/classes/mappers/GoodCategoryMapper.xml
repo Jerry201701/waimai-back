@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.GoodCategoryMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.vo.QueryCategoryVo">
+        <id column="id" jdbcType="BIGINT" property="categoryId" />
+        <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+        <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+        <result column="create_by" jdbcType="BIGINT" property="createBy" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="last_update_by" jdbcType="BIGINT" property="lastUpdateBy" />
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="flag" jdbcType="TINYINT" property="flag" />
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, category_name, shop_id, create_by, create_time, last_update_by, last_update_time,flag
+  </sql>
+
+
+    <insert id="insertSelective" parameterType="com.diane.manage.model.GoodCategory" useGeneratedKeys="true" keyProperty="id">
+        insert into good_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="categoryName != null">
+                category_name,
+            </if>
+            <if test="shopId != null and shopId !=''">
+                shop_id,
+            </if>
+            <if test="createBy != null and createBy !=''">
+                create_by,
+            </if>
+            <if test="createTime != null ">
+                create_time,
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!=''">
+                last_update_by,
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="categoryName != null and categoryName !=''">
+                #{categoryName},
+            </if>
+            <if test="shopId != null ">
+               #{shopId} ,
+            </if>
+            <if test="createBy != null ">
+                #{createBy},
+            </if>
+            <if test="createTime != null ">
+                #{createTime},
+            </if>
+            <if test="lastUpdateBy != null ">
+                #{lastUpdateBy},
+            </if>
+            <if test="lastUpdateTime != null ">
+                #{lastUpdateTime},
+            </if>
+            <if test="flag != null">
+                #{flag},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="findPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from delivery_category
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.diane.manage.model.GoodCategory">
+        update good_category
+        <set>
+            <if test="categoryName != null and categoryName !=''">
+              category_name=  #{categoryName},
+            </if>
+            <if test="shopId != null ">
+              shop_id=  #{shopId} ,
+            </if>
+            <if test="createBy != null ">
+               create_by= #{createBy},
+            </if>
+            <if test="createTime != null ">
+               create_time= #{createTime},
+            </if>
+            <if test="lastUpdateBy != null ">
+               last_update_by= #{lastUpdateBy},
+            </if>
+            <if test="lastUpdateTime != null ">
+               last_update_time= #{lastUpdateTime},
+            </if>
+            <if test="flag != null">
+              flag=  #{flag},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteCategory" parameterType="com.diane.manage.model.CategoryInfo">
+        update delivery_category
+        <set>
+            flag=0
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="listGoodCategory" parameterType="com.diane.manage.model.GoodCategory" resultMap="BaseResultMap">
+        select id,category_name,shop_id from  good_category
+        <where>
+        flag=0
+        <if test="shopId !=null">
+        and  shop_id = #{shopId}
+        </if>
+        </where>
+
+    </select>
+
+
+
+
+
+</mapper>

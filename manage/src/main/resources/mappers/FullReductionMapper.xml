@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.FullReductionMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.model.FullReduction">
+        <result column="id" jdbcType="BIGINT" property="activeId" />
+        <result column="limit_price" jdbcType="SMALLINT" property="limitPrice" />
+        <result column="price" jdbcType="SMALLINT" property="price" />
+        <result column="shop_id" jdbcType="BIGINT" property="shopId"/>
+        <result column="activity_name" jdbcType="BIGINT" property="activeName" />
+        <result column="start_date" jdbcType="BIGINT" property="startDate" />
+        <result column="end_date" jdbcType="BIGINT" property="endDate" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="flag" jdbcType="TINYINT" property="flag" />
+    </resultMap>
+
+
+
+    <insert id="insertSelective" parameterType="com.diane.manage.model.FullReduction" useGeneratedKeys="true" keyProperty="activityId">
+        insert into full_reduction
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="activeName != null and activeName!=''">
+                activity_name,
+            </if>
+            <if test="limitPrice != null ">
+                limit_price,
+            </if>
+            <if test="price !=null">
+                price,
+            </if>
+            <if test="shopId != null ">
+                shop_id,
+            </if>
+            <if test="startDate != null ">
+                start_date,
+            </if>
+             <if test="createTime != null ">
+                create_time,
+            </if>
+             <if test="lastUpdateTime != null ">
+                last_update_time,
+            </if>
+            <if test="endDate != null ">
+                end_date,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="activeName != null and activeName!=''">
+            #{activeName},
+        </if>
+        <if test="limitPrice != null ">
+            #{limitPrice},
+        </if>
+        <if test="price !=null">
+            #{price},
+        </if>
+        <if test="shopId != null ">
+            #{shopId},
+        </if>
+        <if test="startDate != null ">
+            #{startDate},
+        </if>
+        <if test="createTime != null ">
+            #{createTime},
+        </if>
+        <if test="lastUpdateTime != null ">
+            #{lastUpdateTime},
+        </if>
+        <if test="endDate != null ">
+            #{endDate},
+        </if>
+        <if test="flag != null">
+            #{flag},
+        </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.diane.manage.model.FullReduction">
+        update full_reduction
+        <set>
+            <if test="activeName != null and activeName!=''">
+                activity_name =#{activeName},
+            </if>
+            <if test="limitPrice != null ">
+                limit_price =#{limitPrice},
+            </if>
+            <if test="price !=null">
+                price =#{price},
+            </if>
+            <if test="shopId != null ">
+                shop_id =#{shopId},
+            </if>
+            <if test="startDate != null ">
+                start_date =#{startDate},
+            </if>
+            <if test="createTime != null ">
+                create_time =#{createTime},
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time =#{lastUpdateTime},
+            </if>
+            <if test="endDate != null ">
+                end_date =#{endDate},
+            </if>
+            <if test="flag != null">
+                flag =#{flag},
+            </if>
+        </set>
+        where id = #{activityId,jdbcType=BIGINT}
+    </update>
+
+    <select id="listFullReductionByShop" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select id,activity_name,limit_price,price,start_date,end_date
+        from full_reduction
+        where flag = 0
+        and shop_id=#{shopId}
+    </select>
+
+    <update id="removeRecord" parameterType="java.lang.Long">
+        update full_reduction set flag = 1 where id=#{activityId}
+    </update>
+    <select id="findSingleFullReductionByShop"  resultMap="BaseResultMap">
+        select id,activity_name,limit_price,price,start_date,end_date
+        from full_reduction
+        where flag = 0
+        and shop_id=#{shopId}
+        and limit_price &lt;= #{amount}
+        order by price desc limit 1
+    </select>
+
+
+
+</mapper>

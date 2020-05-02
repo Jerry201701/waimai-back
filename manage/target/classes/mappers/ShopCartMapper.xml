@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.ShopCartMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.model.ShopCart">
+        <result column="id" jdbcType="BIGINT" property="cartId" />
+        <result column="openid" jdbcType="VARCHAR" property="openid" />
+        <result column="create_by" jdbcType="BIGINT" property="createBy" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="last_update_by" jdbcType="BIGINT" property="lastUpdateBy" />
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="flag" jdbcType="TINYINT" property="flag" />
+        <result column="shop_cart_type" jdbcType="TINYINT" property="type" />
+    </resultMap>
+    <resultMap id="ShopCartResultMap" type="com.diane.manage.vo.ShopCartVo">
+        <result column="cart_id" jdbcType="BIGINT" property="cartId" />
+        <result column="openid" jdbcType="VARCHAR" property="openid" />
+        <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+        <result column="discount" jdbcType="VARCHAR" property="discount" />
+        <result column="total_price" jdbcType="BIGINT" property="totalPrice" />
+        <result column="pack_charges" jdbcType="BIGINT" property="packCharges" />
+        <result column="delivery_fee" jdbcType="BIGINT" property="deliveryFee" />
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+        <collection property="goodInfoList" resultMap="GoodResultMap"> </collection>
+    </resultMap>
+
+    <resultMap id="GoodResultMap" type="com.diane.manage.vo.cart.ShopGoodRespVo">
+        <result column="good_id" jdbcType="BIGINT" property="goodId" />
+        <result column="good_name" jdbcType="VARCHAR" property="goodName" />
+        <result column="cart_id" jdbcType="BIGINT" property="cartId" />
+        <result column="unit" jdbcType="BIGINT" property="unit" />
+        <result column="price" jdbcType="BIGINT" property="price" />
+        <result column="old_price" jdbcType="BIGINT" property="oldPrice" />
+        <result column="category_id" jdbcType="BIGINT" property="categoryId" />
+        <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+        <result column="quantity" jdbcType="BIGINT" property="quantity" />
+        <result column="label_id" jdbcType="BIGINT" property="labelId" />
+        <result column="label_name" jdbcType="BIGINT" property="labelName" />
+        <collection property="pictureRespVoList" resultMap="PictureResultMap"> </collection>
+    </resultMap>
+
+    <resultMap id="LabelResultMap" type="com.diane.manage.vo.cart.GoodLabelVo">
+
+        <result column="label_name" jdbcType="VARCHAR" property="labelName" />
+        <result column="label_id" jdbcType="BIGINT" property="labelId" />
+    </resultMap>
+    <resultMap id="PictureResultMap" type="com.diane.manage.vo.cart.PictureRespVo">
+        <result column="picture_url" jdbcType="VARCHAR" property="pictureUrl" />
+        <result column="picture_id" jdbcType="BIGINT" property="pictureId" />
+    </resultMap>
+
+    <resultMap id="OpenidResultMap" type="com.diane.manage.vo.cart.CartResultVo">
+        <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+        <result column="discount" jdbcType="BIGINT" property="discount" />
+        <result column="delivery_fee" jdbcType="BIGINT" property="deliveryFee" />
+<!--        <result column="pack_charges" jdbcType="BIGINT" property="packCharges" />-->
+        <result column="total_price" jdbcType="BIGINT" property="totalPrice" />
+        <result column="quantity" jdbcType="BIGINT" property="quantity" />
+    </resultMap>
+
+
+
+    <sql id="Base_Column_List">
+    id, openid,  create_by, create_time, last_update_by, last_update_time,flag,shop_cart_type,good_id,good_name,label_id,label_name
+  </sql>
+
+
+    <insert id="insertSelective" parameterType="com.diane.manage.model.ShopCart" useGeneratedKeys="true" keyProperty="cartId">
+        insert into shop_cart
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="openid != null and openid!=''">
+                openid,
+            </if>
+            <if test="createBy != null and createBy !=''">
+                create_by,
+            </if>
+            <if test="createTime != null ">
+                create_time,
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!=''">
+                last_update_by,
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+            <if test="type != null">
+                shop_cart_type,
+            </if>
+            <if test="goodId != null">
+                good_id,
+            </if>
+            <if test="shopId !=null" >
+                shop_id,
+            </if>
+            <if test="quantity !=null" >
+                quantity,
+            </if>
+             <if test="labelId !=null" >
+                label_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="openid != null and openid!=''">
+                #{openid},
+            </if>
+            <if test="createBy != null and createBy !=''">
+                #{createBy},
+            </if>
+            <if test="createTime != null ">
+                #{createTime},
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!=''">
+                #{lastUpdateBy},
+            </if>
+            <if test="lastUpdateTime != null ">
+                #{lastUpdateTime},
+            </if>
+            <if test="flag != null">
+                #{flag},
+            </if>
+            <if test="type != null">
+                #{type},
+            </if>
+            <if test="goodId != null">
+                #{goodId},
+            </if>
+            <if test="shopId !=null" >
+                #{shopId},
+            </if>
+            <if test="quantity !=null" >
+                #{quantity},
+            </if>
+             <if test="labelId !=null" >
+                #{labelId},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="findPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from shop_cart
+    </select>
+
+    <select id="findPageConditions" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from company_info
+        <where>
+            <if test="regionId !=null">
+                and region_id=#{regionId,jdbcType=BIGINT}
+            </if>
+            <if test="id !=null">
+                and id =#{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId !=null">
+                and user_id =#{userId,jdbcType=BIGINT}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.diane.manage.model.ShopCart">
+        update shop_cart
+        <set>
+            <if test="lastUpdateBy != null and lastUpdateBy!=''">
+                last_update_by = #{lastUpdateBy},
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time =#{lastUpdateTime},
+            </if>
+            <if test="flag != null">
+                flag =#{flag},
+            </if>
+            <if test="type != null">
+                shop_cart_type =#{type},
+            </if>
+            <if test="goodId != null">
+               good_id= #{goodId},
+            </if>
+             <if test="shopId != null">
+               shop_id= #{shopId},
+            </if>
+            <if test="labelId !=null" >
+               label_id= #{labelId},
+            </if>
+             <if test="quantity !=null" >
+                 quantity= #{quantity},
+            </if>
+        </set>
+        where id = #{cartId,jdbcType=BIGINT}
+    </update>
+
+    <select id="showShopCartByUser" parameterType="com.diane.manage.model.ShopCart" resultMap="ShopCartResultMap">
+            select  cart.id cart_id, cart.shop_id,cart.good_id,shop.shop_name,shop.pack_charges,sum(good.price) total_price
+            from  shop_cart cart
+            left join shop_info shop on cart.shop_id=shop.id
+            left join good_info good on good.id=cart.good_id
+            <where>
+                cart.flag=0
+                <if test="openid !=null and openid !=''">
+                    and cart.openid=#{openid}
+                </if>
+                <if test="shopId !=null">
+                    and cart.shop_id=#{shopId}
+                </if>     
+            </where>
+    </select>
+
+    <select id="shopCartList"  resultMap="GoodResultMap">
+        SELECT cart.id cart_id,cart.good_id ,good.good_name, IFNULL(gl.label_price,good.price) price ,good.picture_url,
+        good.category_id,good.category_name,cart.flag,good.unit,cart.quantity,gl.id label_id,gl.label_name
+        FROM shop_cart cart
+        left join shop_info shop on shop.id=cart.shop_id
+        left join  good_label gl on gl.id=cart.label_id
+        left join
+        (select  gi.id, gi.good_name, gi.price, gi.unit, gi.sale_price,pi.picture_url,gc.id category_id,gc.category_name
+        from good_info gi
+        left join picture_info pi on pi.good_id=gi.id
+        left join good_category gc on gc.id = gi.category_id) good on good.id=cart.good_id
+        <where>
+             cart.flag=0
+             and cart.quantity &gt; 0
+            <if test="shopId">
+            and cart.shop_id=#{shopId}
+            </if>
+            <if test="openid">
+               and cart.openid=#{openid}
+            </if>
+        </where>
+
+<!--        SELECT cart.id cart_id,cart.openid,cart.good_id ,shop.shop_name,good.good_name,sum(good.price) total_price,good.label_id,-->
+<!--        good.label_name,good.picture_url,good.category_id,good.category_name,cart.shop_id,good.price,good.old_price-->
+<!--        FROM shop_cart cart-->
+<!--        left join shop_info shop on shop.id=cart.shop_id-->
+<!--        left join-->
+<!--        (select  gi.id, gi.good_name, gi.price old_price, gi.unit, gi.sale_price price,gl.id label_id,gl.label_name,pi.picture_url,gc.id category_id,gc.category_name-->
+<!--        from good_info gi-->
+<!--        left join  good_label gl on gi.id=gl.good_id-->
+<!--        left join picture_info pi on pi.good_id=gi.id-->
+<!--        left join good_category gc on gc.id = gi.category_id) good on good.id=cart.good_id-->
+<!--        <where>-->
+<!--            cart.flag=0-->
+<!--            <if test="openid !=null and openid !=''">-->
+<!--                and cart.openid=#{openid}-->
+<!--            </if>-->
+<!--            <if test="shopId !=null">-->
+<!--                and cart.shop_id=#{shopId}-->
+<!--            </if>-->
+<!--        </where>-->
+
+    </select>
+    
+
+    <!--    <select id="findPageByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">-->
+    <!--        select  <include refid="Base_Column_List" />  from company_info where user_id=#{userId}-->
+    <!--    </select>-->
+
+        <select id="listCartByOpenid" parameterType="java.lang.String" resultMap="OpenidResultMap">
+            select shop.id shop_id,shop.shop_name,shop.pack_charges from shop_cart cart
+            left join shop_info shop on cart.shop_id=shop.id
+            where  cart.flag=0
+            and cart.quantity &gt; 0
+            and cart.shop_id is not  null
+            and cart.openid=#{openid}
+            group by cart.shop_id
+        </select>
+
+    <select id="singleShopCartInfo" resultMap="OpenidResultMap">
+         select shop.id shop_id,shop.shop_name,shop.pack_charges
+            from shop_cart cart
+            left join shop_info shop on cart.shop_id=shop.id
+            where  cart.flag=0
+            and cart.openid=#{openid}
+            and cart.shop_id=#{shopId}
+            group by cart.shop_id
+    </select>
+
+    <select id="countTotalPrice"  resultType="java.lang.Integer">
+        select  IFNULL(sum(good.price*cart.quantity),0)   total_price
+        from shop_cart cart
+        left join good_info good on good.id=cart.good_id
+        where  cart.flag=0
+        and cart.openid=#{openid}
+        and cart.shop_id=#{shopId}
+    </select>
+
+
+
+    <select id="findAllCartId" resultType="java.lang.Long">
+        select id from shop_cart where openid=#{openid} and shop_id=#{shopId}
+
+    </select>
+    <update id="cleanShopCart" parameterType="java.lang.Long">
+        update shop_cart
+        <set>
+           flag=1
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+
+    </update>
+
+
+
+
+
+
+</mapper>

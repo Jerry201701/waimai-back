@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.SettlingModelMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.model.SettlingModel">
+        <result column="id" jdbcType="BIGINT" property="id" />
+        <result column="company_id" jdbcType="BIGINT" property="companyId"/>
+        <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+        <result column="region_id" jdbcType="BIGINT" property="regionId" />
+        <result column="good_id" jdbcType="BIGINT" property="goodId" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="flag" jdbcType="TINYINT" property="flag" />
+        <result column="fixed_amount" jdbcType="SMALLINT" property="fixedAmount" />
+        <result column="settling_rate" jdbcType="SMALLINT" property="settlingRate" />
+        <result column="upper_value" jdbcType="SMALLINT" property="upperValue" />
+        <result column="bottom_value" jdbcType="SMALLINT" property="bottomValue" />
+        <result column="calculation_rule" jdbcType="SMALLINT" property="calculationRule" />
+        <result column="percentage" jdbcType="SMALLINT" property="percentage" />
+        <result column="calculation_rule" jdbcType="SMALLINT" property="calculationRule" />
+    </resultMap>
+
+
+    <insert id="addSettlingModel" parameterType="com.diane.manage.model.SettlingModel" useGeneratedKeys="true" keyProperty="id">
+        insert into settling_model
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="companyId != null ">
+                company_id,
+            </if>
+            <if test="shopId != null ">
+                shop_id,
+            </if>
+            <if test="goodId != null ">
+                good_id,
+            </if>
+            <if test="regionId != null ">
+                region_id,
+            </if>
+            <if test="createTime != null ">
+                create_time,
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+            <if test="fixedAmount !=null ">
+                fixed_amount,
+            </if>
+            <if test="settlingRate !=null ">
+                settling_rate,
+            </if>
+            <if test="upperValue !=null ">
+                upper_value,
+            </if>
+            <if test="bottomValue !=null ">
+                bottom_value  ,
+            </if>
+            <if test="settlingWay !=null ">
+                settling_way,
+            </if>
+            <if test="calculationRule !=null ">
+                calculation_rule,
+            </if>
+              <if test="percentage !=null ">
+                  percentage,
+            </if>
+              <if test="fee !=null ">
+                fee,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="companyId != null ">
+                #{companyId},
+            </if>
+            <if test="shopId != null ">
+                #{shopId},
+            </if>
+            <if test="goodId != null ">
+                #{goodId},
+            </if>
+            <if test="regionId != null ">
+                #{regionId},
+            </if>
+            <if test="createTime != null ">
+                #{createTime},
+            </if>
+            <if test="lastUpdateTime != null ">
+                #{lastUpdateTime},
+            </if>
+            <if test="flag != null">
+                #{flag},
+            </if>
+            <if test="fixedAmount !=null ">
+                #{fixedAmount},
+            </if>
+            <if test="settlingRate !=null ">
+                #{settlingRate},
+            </if>
+            <if test="upperValue !=null ">
+                #{upperValue},
+            </if>
+            <if test="bottomValue !=null ">
+                #{bottomValue},
+            </if>
+            <if test="settlingWay !=null ">
+                #{settlingWay},
+            </if>
+            <if test="calculationRule !=null ">
+                #{calculationRule},
+            </if>
+            <if test="percentage !=null ">
+                #{percentage},
+            </if>
+            <if test="fee !=null ">
+                #{fee},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="findPageByRegion" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select id,company_id,good_id,shop_id,fixed_amount,settling_rate,upper_value,region_id,create_time,
+        last_update_time,calculation_rule,bottom_value,fee,percentage
+        from settling_model
+        where flag = 1
+        and region_id=#{regionId}
+        order by create_time desc
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.diane.manage.model.SettlingModel">
+        update settling_model
+        <set>
+            <if test="companyId != null">
+              company_id =  #{companyId},
+            </if>
+            <if test="shopId != null">
+              shop_id=  #{shopId},
+            </if>
+            <if test="goodId != null ">
+              good_id =  #{goodId},
+            </if>
+            <if test="regionId != null ">
+               region_id= #{regionId},
+            </if>
+            <if test="createTime != null ">
+              create_time=  #{createTime},
+            </if>
+            <if test="lastUpdateTime != null ">
+              last_update_time =  #{lastUpdateTime},
+            </if>
+            <if test="flag != null">
+               flag= #{flag},
+            </if>
+            <if test="fixedAmount !=null ">
+              fixed_amount=  #{fixedAmount},
+            </if>
+            <if test="settlingRate !=null ">
+              settling_rate=  #{settlingRate},
+            </if>
+            <if test="upperValue !=null ">
+             upper_value  = #{upperValue},
+            </if>
+            <if test="bottomValue !=null ">
+                bottom_value  = #{bottomValue},
+            </if>
+            <if test="percentage !=null ">
+                percentage =  #{percentage},
+            </if>
+            <if test="fee !=null ">
+              fee=  #{fee},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="findCheck" parameterType="java.lang.Long" resultType="java.lang.String">
+        select CONCAT('C',company.id) id from settling_model model
+        left join  company_info company on model.id=company.settlement_way
+        where model.id=#{settlementId}
+        union
+        select CONCAT('S',shop.id) id from settling_model model
+        left join shop_info shop on model.id=shop.settlement_way
+        where model.id=#{settlementId}
+        union
+        select CONCAT('G',good.id) id from settling_model model
+        left join  good_info good  on model.id=good.settlement_way
+        where model.id=#{settlementId}
+    </select>
+
+    <update id="removeSettlementRecord" parameterType="java.lang.Long">
+        update settling_model set flag = false
+        where id=#{settlementId}
+    </update>
+    <select id="findSettlementByShop" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select id,company_id,good_id,shop_id,fixed_amount,settling_rate,upper_value,region_id,create_time,last_update_time,fee,percentage
+        from settling_model
+        where flag = 1
+        and shop_id=#{shopId}
+    </select>
+
+
+</mapper>

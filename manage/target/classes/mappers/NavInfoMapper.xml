@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.NavInfoMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.model.NavInfo">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="region_name" jdbcType="VARCHAR" property="regionName" />
+        <result column="region_id" jdbcType="BIGINT" property="regionId" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="nav_name" jdbcType="VARCHAR" property="navName" />
+        <result column="logo_url" jdbcType="VARCHAR" property="logoUrl" />
+        <result column="appid" jdbcType="VARCHAR" property="appid" />
+        <result column="flag" jdbcType="TINYINT" property="flag" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="path_small" jdbcType="VARCHAR" property="pathSmall" />
+        <result column="path_web" jdbcType="VARCHAR" property="pathWeb" />
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, nav_name, create_time,last_update_time,flag,remark,region_id,logo_url,appid,path_web,path_small
+  </sql>
+
+
+    <insert id="insertSelective" parameterType="com.diane.manage.model.NavInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into nav_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="navName != null and navName!=''">
+                nav_name,
+            </if>
+            <if test="createTime != null ">
+                create_time,
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+            <if test="remark != null and remark !=''">
+                remark,
+            </if>
+             <if test="appid != null and appid !=''">
+                appid,
+            </if>
+             <if test="logoUrl != null and logoUrl !=''">
+                logo_url,
+            </if>
+             <if test="regionId != null ">
+                region_id,
+            </if>
+              <if test="pathSmall != null and pathSmall !=''">
+                path_small,
+            </if>
+              <if test="pathWeb != null and pathWeb !=''">
+                path_web,
+            </if>
+             <if test="categoryId != null ">
+                category_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="navName != null and navName!=''">
+                #{navName},
+            </if>
+            <if test="createTime != null ">
+                #{createTime},
+            </if>
+            <if test="lastUpdateTime != null ">
+                #{lastUpdateTime},
+            </if>
+            <if test="flag != null">
+                #{flag},
+            </if>
+            <if test="remark != null and remark !=''">
+                #{remark},
+            </if>
+            <if test="appid != null and appid !=''">
+                #{appid},
+            </if>
+            <if test="logoUrl != null and logoUrl !=''">
+                #{logoUrl},
+            </if>
+            <if test="regionId != null ">
+                #{regionId},
+            </if>
+            <if test="pathSmall != null and pathSmall !=''">
+                #{pathSmall},
+            </if>
+            <if test="pathWeb != null and pathWeb !=''">
+                #{pathWeb},
+            </if>
+               <if test="categoryId != null ">
+                #{categoryId},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="findPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from nav_info
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.diane.manage.model.DeliveryRegion">
+        update nav_info
+        <set>
+            <if test="navName != null and navName!=''">
+              nav_name=  #{navName},
+            </if>
+            <if test="createTime != null ">
+              create_time=  #{createTime},
+            </if>
+            <if test="lastUpdateTime != null ">
+              last_update_time=  #{lastUpdateTime},
+            </if>
+            <if test="flag != null">
+             flag=   #{flag},
+            </if>
+            <if test="remark != null and remark !=''">
+             remark =   #{remark},
+            </if>
+            <if test="path != null and path !=''">
+              path=  #{path},
+            </if>
+            <if test="appid != null and appid !=''">
+              appid=  #{appid},
+            </if>
+            <if test="logoUrl != null and logoUrl !=''">
+             logo_url=   #{logoUrl},
+            </if>
+            <if test="pathSmall != null and pathSmall !=''">
+               path_small= #{pathSmall},
+            </if>
+            <if test="pathWeb != null and pathWeb !=''">
+              path_web=  #{pathWeb},
+            </if>
+             <if test="categoryId != null ">
+              category_id=  #{categoryId},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteNavInfo" parameterType="com.diane.manage.model.NavInfo">
+        update nav_info
+        <set>
+            flag=0
+        </set>
+        where id = #{id}
+    </update>
+    <select id="listNavByRegion" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from nav_info
+        where region_id=#{regionId}
+    </select>
+
+
+</mapper>

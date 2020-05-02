@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.SubAdminMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.model.SubAdmin">
+        <id column="id" jdbcType="BIGINT" property="adminId" />
+        <result column="username" jdbcType="VARCHAR" property="username" />
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+        <result column="sub_admin_name" jdbcType="VARCHAR" property="subAdminName" />
+        <result column="operator_password" jdbcType="VARCHAR" property="operatorPassword" />
+        <result column="create_by" jdbcType="BIGINT" property="createBy" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="last_update_by" jdbcType="BIGINT" property="lastUpdateBy" />
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="flag" jdbcType="TINYINT" property="flag" />
+        <result column="company_id" jdbcType="BIGINT" property="companyId" />
+        <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+        <result column="user_id" jdbcType="BIGINT" property="userId" />
+    </resultMap>
+
+
+    <insert id="insertSelective" parameterType="com.diane.manage.model.SubAdmin" useGeneratedKeys="true" keyProperty="id">
+        insert into sub_admin
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="shopId != null">
+                shop_id,
+            </if>
+            <if test="regionId != null">
+                region_id,
+            </if>
+            <if test="companyId != null">
+                company_id,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+            <if test="operatorPassword != null">
+                operator_password,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="lastUpdateBy != null">
+                last_update_by,
+            </if>
+            <if test="lastUpdateTime != null">
+                last_update_time,
+            </if>
+               <if test="subAdminName != null">
+                   sub_admin_name,
+                </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId},
+            </if>
+            <if test="shopId != null">
+                #{shopId},
+            </if>
+            <if test="regionId != null">
+                #{regionId},
+            </if>
+            <if test="companyId != null">
+                #{companyId},
+            </if>
+            <if test="flag != null">
+                #{flag},
+            </if>
+            <if test="operatorPassword != null">
+                #{operatorPassword},
+            </if>
+            <if test="createBy != null">
+                #{createBy},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="lastUpdateBy != null">
+                #{lastUpdateBy},
+            </if>
+            <if test="lastUpdateTime != null">
+                #{lastUpdateTime},
+            </if>
+            <if test="subAdminName != null">
+                #{subAdminName},
+            </if>
+        </trim>
+    </insert>
+
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.diane.manage.model.SubAdmin">
+        update sub_admin
+        <set>
+            <if test="userId != null">
+             user_id =   #{userId},
+            </if>
+            <if test="shopId != null">
+              shop_id =  #{shopId},
+            </if>
+            <if test="companyId != null">
+             company_id =   #{companyId},
+            </if>
+            <if test="flag != null">
+               flag = #{flag},
+            </if>
+            <if test="operatorPassword != null and operatorPassword !=''">
+              operator_password =  #{operatorPassword},
+            </if>
+            <if test="createBy != null">
+                #{createBy},
+            </if>
+            <if test="createTime != null">
+             create_by =   #{createTime},
+            </if>
+            <if test="lastUpdateBy != null">
+              last_update_by =  #{lastUpdateBy},
+            </if>
+            <if test="lastUpdateTime != null">
+             last_update_time =   #{lastUpdateTime},
+            </if>
+            <if test="subAdminName != null">
+                sub_admin_name = #{subAdminName},
+            </if>
+        </set>
+        where id = #{adminId,jdbcType=BIGINT}
+    </update>
+
+    <select id="listSubAdmin" resultMap="BaseResultMap">
+        select  a.id,a.shop_id,a.company_id,s.shop_name,u.name ,u.mobile username,u.id user_id,a.sub_admin_name
+        from sub_admin a
+        left join  sys_user u on u.id=a.user_id
+        left join  shop_info s on s.id=a.shop_id
+        <where>
+        a.flag = 0
+         and   a.company_id=#{companyId}
+            <if test="shopId !=null">
+                and a.shop_id =#{shopId}
+            </if>
+        </where>
+    </select>
+
+
+
+    <select id="findUserIdByShop" parameterType="java.lang.Long" resultType="java.lang.Long">
+        select user_id from sub_admin where id=#{shopId}
+    </select>
+
+
+</mapper>

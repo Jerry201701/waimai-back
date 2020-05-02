@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.ShopWithdrawMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.model.ShopWithdraw">
+        <id column="id" jdbcType="BIGINT" property="withdrawId" />
+        <result column="money" jdbcType="VARCHAR" property="money" />
+        <result column="apply_time" jdbcType="TIMESTAMP" property="applyTime" />
+        <result column="withdraw_status" jdbcType="TINYINT" property="status" />
+        <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    </resultMap>
+<resultMap id="WithdrawResultMap" type="com.diane.manage.vo.shop.WithdrawVo">
+        <id column="id" jdbcType="BIGINT" property="withdrawId" />
+        <result column="money" jdbcType="BIGINT" property="withdrawAmount" />
+        <result column="apply_time" jdbcType="TIMESTAMP" property="applyTime" />
+        <result column="withdraw_status" jdbcType="TINYINT" property="status" />
+        <result column="company_id" jdbcType="BIGINT" property="companyId" />
+        <result column="reason" jdbcType="VARCHAR" property="reason" />
+
+    </resultMap>
+<resultMap id="WithdrawRespResultMap" type="com.diane.manage.vo.withdrawal.WithdrawalRespVo">
+        <id column="id" jdbcType="BIGINT" property="withdrawId" />
+        <result column="money" jdbcType="BIGINT" property="withdrawAmount" />
+        <result column="apply_time" jdbcType="TIMESTAMP" property="applyTime" />
+        <result column="withdraw_status" jdbcType="TINYINT" property="status" />
+        <result column="company_id" jdbcType="BIGINT" property="companyId" />
+        <result column="reason" jdbcType="VARCHAR" property="reason" />
+        <result column="withdraw_type" jdbcType="TINYINT" property="type" />
+        <result column="delivery_name" jdbcType="VARCHAR" property="deliveryName" />
+        <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+        <result column="account_name" jdbcType="VARCHAR" property="accountName" />
+
+    </resultMap>
+
+
+    <insert id="insertSelective" parameterType="com.diane.manage.model.ShopWithdraw" useGeneratedKeys="true" keyProperty="withdrawId">
+        insert into shop_withdraw
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="companyId != null">
+                company_id,
+            </if>
+             <if test="deliveryId != null">
+                delivery_id,
+            </if>
+            <if test="money != null">
+                money,
+            </if>
+            <if test="status != null">
+                withdraw_status,
+            </if>
+            <if test="applyTime != null">
+                apply_time,
+            </if>
+             <if test="type != null">
+                 withdraw_type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="companyId != null">
+                #{companyId},
+            </if>
+             <if test="deliveryId != null">
+                #{deliveryId},
+            </if>
+            <if test="money != null">
+                #{money},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="applyTime != null">
+                #{applyTime},
+            </if>
+            <if test="type != null">
+                #{type},
+            </if>
+        </trim>
+    </insert>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.diane.manage.model.ShopWithdraw">
+        update shop_withdraw
+        <set>
+            <if test="companyId != null">
+             company_id =   #{companyId},
+            </if>
+            <if test="money != null">
+              money =  #{money},
+            </if>
+            <if test="status != null">
+                withdraw_status = #{status},
+            </if>
+            <if test="applyTime != null">
+              apply_time =  #{applyTime},
+            </if>
+             <if test="type != null">
+                 feedback_type =  #{type},
+            </if>
+            <if test="question != null and question !=''">
+              question =  #{question},
+            </if>
+        </set>
+        where id = #{withdrawId,jdbcType=BIGINT}
+    </update>
+
+    <select id="findPageByCompany" parameterType="com.diane.manage.vo.shop.WithdrawVo" resultMap="WithdrawResultMap">
+        select id,money,apply_time,withdraw_status,reason from shop_withdraw
+        <where>
+        <if test="companyId !=null">
+        company_id=#{companyId}
+
+        </if>
+           <if test="deliveryId !=null">
+             delivery_id =#{deliveryId}
+           </if>
+        <if test="status == 1">
+            and withdraw_status = 1
+        </if>
+        </where>
+        order by  apply_time desc
+    </select>
+    <select id="findWithdrawAmount" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        select IFNULL(sum(money),0) from shop_withdraw where company_id=#{companyId}
+    </select>
+
+    <select id="findPage" parameterType="java.lang.Long" resultMap="WithdrawRespResultMap">
+        select w.id,w.money,w.apply_time,w.withdraw_status,w.reason,w.withdraw_type,IFNULL(d.delivery_name,c.company_name) account_name
+        from shop_withdraw w
+        left join delivery d on w.delivery_id=d.id
+        left join company_info c on w.company_id=c.id
+
+    </select>
+
+    <update id="checkWithdraw" >
+        update shop_withdraw set withdraw_status =#{status} where id =#{withdrawId}
+    </update>
+
+</mapper>

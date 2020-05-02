@@ -1,0 +1,317 @@
+    1  df -h
+    2  fdisk l
+    3  fdisk -l
+    4  ll
+    5  cd ..
+    6  ll
+    7  cd usr
+    8  ll
+    9  cd local
+   10  ll
+   11  cd src
+   12  ll
+   13  cat  /etc/issue
+   14  lsb_release -a
+   15  ps -ef |grep mysql
+   16  lsof -i:3306
+   17  netstat -ano |grep 3306
+   18  pwd
+   19  clear
+   20  wget -i -c http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm
+   21  ll
+   22  yum -y install mysql57-community-release-el7-10.noarch.rpm
+   23  yum -y install mysql-community-server
+   24  systemctl start  mysqld.service
+   25  systemctl status mysqld.service
+   26  cd /var
+   27  ll
+   28  cd log
+   29  ll
+   30  cat mysqld.log
+   31  mysql -uroot -p
+   32  yum -y remove mysql57-community-release-el7-10.noarch
+   33  mysql -uroot -p
+   34  exit
+   35  mysql -uroot -p
+   36  cd ..
+   37  ll
+   38  cd usr
+   39  ll
+   40  cd local
+   41  ll
+   42  cd src
+   43  ll
+   44  yum install gcc-c++
+   45  yum install -y pcre pcre-devel
+   46  yum install -y zlib zlib-devel
+   47  yum install -y openssl openssl-devel
+   48  ll
+   49  tar -zxvf nginx-1.17.3.tar.gz -C /usr/local/nginx
+   50  pwd
+   51  cd ..
+   52  ll
+   53  mkdir nginx
+   54  cd src
+   55  ll
+   56  tar -zxvf nginx-1.17.3.tar.gz -C /usr/local/nginx
+   57  ll
+   58  cd ..
+   59  ll
+   60  cd nginx
+   61  ll
+   62  cd nginx-1.17.3/
+   63  ll
+   64  ./configure
+   65  make
+   66  make install
+   67  whereis nginx
+   68  ll
+   69  cd ..
+   70  ll
+   71  cd sbin
+   72  ;;
+   73  ll
+   74  ./nginx
+   75  cd ..
+   76  ll
+   77  cd conf
+   78  ll
+   79  vim nginx.conf
+   80  cd ..
+   81  ll
+   82  cd ..
+   83  ll
+   84  cd src
+   85  ll
+   86  tar -zxvf redis-5.0.5.tar.gz -C /usr/local/
+   87  ll
+   88  cd ..
+   89  ll
+   90  cd redis-5.0.5/
+   91  ll
+   92  make MALLOC=libc
+   93  ll
+   94  cd src
+   95  ll
+   96  ./redis-server
+   97  ll
+   98  cd ..
+   99  ll
+  100  vim redis.conf
+  101  cd src
+  102  ll
+  103  pwd
+  104  ./redis-server /usr/local/redis-5.0.5/redis.conf 
+  105  ps -aux | grep redis
+  106  ll
+  107  pwd
+  108  cd ..
+  109  ll
+  110  cd ..
+  111  ll
+  112  pwd
+  113  cd src
+  114  ll
+  115  docker version
+  116  uname -r
+  117  rpm -qa|grep docker
+  118  yum list docker-ce --showduplicates | sort -r
+  119  ll
+  120  yum update
+  121  yum install -y yum-utils device-mapper-persistent-data lvm2
+  122  yum-config-manager --add-repo http://download.docker.com/linux/centos/docker-ce.repo
+  123  yum list docker-ce --showduplicates | sort -r
+  124  yum install docker-ce-18.03.1.ce
+  125  yum list docker-ce --showduplicates | sort -r
+  126  yum -y install docker-ce
+  127  yum list docker-ce --showduplicates | sort -r
+  128  yum install docker-ce-18.06.3.ce
+  129  systemctl start docker
+  130  docker version
+  131  docker images
+  132  docker search -s 10 java
+  133  docker search centos
+  134  clear
+  135  docker search centos
+  136  clear
+  137  docker search centos
+  138  docker pull centos
+  139  docker images
+  140  ll
+  141  pwd
+  142  cd ..
+  143  ll
+  144  cd share
+  145  ll
+  146  cd man
+  147  ll
+  148  cd ..
+  149  ll
+  150  cd ..
+  151  ll
+  152  cd aegis/
+  153  ll
+  154  cd ..
+  155  ll
+  156  pwd
+  157  cd ..
+  158  ll
+  159  pwd
+  160  cd share
+  161  ll
+  162  cd ..
+  163  ll
+  164  pwd
+  165  cd local
+  166  ll
+  167  mkdir software
+  168  ll
+  169  cd src
+  170  ll
+  171  cd ..
+  172  ll
+  173  pwd
+  174  cd src
+  175  ll
+  176  cp jdk-8u221-linux-x64.tar.gz ../software
+  177  ll
+  178  cd ..
+  179  ll
+  180  cd software
+  181  ll
+  182  mkdir produce
+  183  ll
+  184  pwd
+  185  ll
+  186  docker ps 
+  187  docker ps -a
+  188  ll
+  189  docker images
+  190  pwd
+  191  docker run -it -p 8006:8080 -v /usr/local/software:/mnt/software --privileged=true 0f3e07c0138f  /bin/bash
+  192  docker ps
+  193  exit
+  194  cd ..
+  195  cd usr/local
+  196  ll
+  197  cd software/
+  198  ls
+  199  ll
+  200  cd produce/
+  201  ll
+  202  docker ps
+  203  docker ps -a
+  204  docker exec -it 4cd989777c42  /bin/bash
+  205  docker images
+  206  docker restart 4cd989777c42
+  207  docker exec -it 4cd989777c42  /bin/bash
+  208  exit
+  209  ll
+  210  cd ..
+  211  ll
+  212  cd usr
+  213  ll
+  214  cd local
+  215  ll
+  216  cd nginx
+  217  ll
+  218  ls
+  219  ll
+  220  cd conf
+  221  ll
+  222  vim nginx.conf
+  223  cd ..
+  224  ll
+  225  ./sbin/nginx -s reload
+  226  vim conf
+  227  pwd
+  228  ls
+  229  ll
+  230  vim conf/nginx.conf
+  231  ll
+  232  ./sbin/nginx -v
+  233  pwd
+  234  ps -ef |grep nginx
+  235  ls
+  236  ll
+  237  ./sbin/nginx -s quit
+  238  ps -ef |grep nginx
+  239  kill 23905
+  240  ps -ef |grep nginx
+  241  pwd
+  242  ll
+  243  cd nginx-1.17.3/
+  244  ll
+  245  pwd
+  246  ./configure --prefix=/usr/local/nginx --with-http_stub_status_module --with-http_ssl_module
+  247  make
+  248  cp /usr/local/nginx/sbin/nginx /usr/local/nginx/sbin/nginx.bak
+  249  cd ..
+  250  ll
+  251  cd sbin
+  252  ll
+  253  cd ..
+  254  ll
+  255  cd nginx-1.17.3/
+  256  ll
+  257  cd objs
+  258  ll
+  259  cd ..
+  260  ll
+  261  pwd
+  262  ll
+  263  cp ./objs/nginx /usr/local/nginx/sbin/
+  264  /usr/local/nginx/sbin/nginx -V
+  265  ps -ef|nginx
+  266  ps -ef|grep nginx
+  267  cd ..
+  268  ll
+  269  pwd
+  270  ./sbin/nginx 
+  271  ll
+  272  clear
+  273  ll
+  274  vim conf/nginx.conf
+  275  ll
+  276  ./sbin/nginx -s reload
+  277  vim conf/nginx.conf
+  278  ll
+  279  pws
+  280  pwd
+  281  cd ..
+  282  ll
+  283  cd src
+  284  ll
+  285  clear
+  286  ll
+  287  rpm -ivh erlang-19.0.4-1.el7.centos.x86_64.rpm
+  288  erl
+  289  rpm -ivh rabbitmq-server-3.6.6-1.el7.noarch.rpm 
+  290  yum install socat
+  291  rpm -ivh rabbitmq-server-3.6.6-1.el7.noarch.rpm 
+  292  ll
+  293  /sbin/service rabbitmq-server start
+  294  /sbin/service rabbitmq-server status
+  295  cd /
+  296  ll
+  297  cd sbin
+  298  ll
+  299  cd ..
+  300  ll
+  301  cd usr
+  302  ll
+  303  cd sbin
+  304  ll
+  305  pwd
+  306  ./rabbitmq-plugins list
+  307  ./rabbitmqctl status
+  308  cd ..
+  309  pwd
+  310  ll
+  311  cd local
+  312  ll
+  313  rabbitmqctl status
+  314  rabbitmq-plugins enable rabbitmq_management
+  315  rabbitmqctl list_users
+  316  history
+  317  history >> history.txt

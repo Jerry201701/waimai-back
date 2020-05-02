@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.AddressInfoMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.vo.AddressQuery">
+        <result column="address_name" jdbcType="VARCHAR" property="address" />
+        <result column="phone" jdbcType="VARCHAR" property="phone" />
+        <result column="id" jdbcType="BIGINT" property="addressId" />
+        <result column="contact" jdbcType="VARCHAR" property="contact"/>
+        <result column="openid" jdbcType="VARCHAR" property="openid" />
+        <result column="region_id" jdbcType="BIGINT" property="regionId" />
+        <result column="create_by" jdbcType="BIGINT" property="createBy" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="last_update_by" jdbcType="BIGINT" property="lastUpdateBy" />
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="flag" jdbcType="TINYINT" property="flag" />
+        <result column="address_label" jdbcType="VARCHAR" property="addressLabel" />
+        <result column="set_default" jdbcType="TINYINT" property="setDefault" />
+        <result column="region_name" jdbcType="TINYINT" property="regionName" />
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, address_name, phone, contact, create_by, create_time, last_update_by, last_update_time,
+    flag,address_label,set_default,openid,region_id
+  </sql>
+
+
+    <insert id="insertSelective" parameterType="com.diane.manage.vo.AddressQuery" useGeneratedKeys="true" keyProperty="addressId">
+        insert into address_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="address != null and address!=''">
+                address_name,
+            </if>
+            <if test="phone != null and phone!=''">
+                phone,
+            </if>
+            <if test="openid != null and openid!=''">
+                openid,
+            </if>
+            <if test="regionId != null ">
+                region_id,
+            </if>
+            <if test="createBy != null and createBy !=''">
+                create_by,
+            </if>
+            <if test="createTime != null ">
+                create_time,
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!=''">
+                last_update_by,
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+            <if test="setDefault !=null ">
+                set_default,
+            </if>
+            <if test="contact !=null ">
+                contact,
+            </if>
+            <if test="addressLabel !=null ">
+                address_label,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="address != null and address!=''">
+                #{address},
+            </if>
+            <if test="phone != null and phone!=''">
+                #{phone},
+            </if>
+            <if test="openid != null and openid!=''">
+                #{openid},
+            </if>
+            <if test="regionId != null ">
+                #{regionId},
+            </if>
+            <if test="createBy != null and createBy !=''">
+                #{createBy},
+            </if>
+            <if test="createTime != null ">
+                #{createTime},
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!=''">
+                #{lastUpdateBy},
+            </if>
+            <if test="lastUpdateTime != null ">
+                #{lastUpdateTime},
+            </if>
+            <if test="flag != null">
+                #{flag},
+            </if>
+            <if test="setDefault !=null ">
+                #{setDefault},
+            </if>
+            <if test="contact !=null ">
+                #{contact},
+            </if>
+            <if test="addressLabel !=null ">
+                #{addressLabel},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="findPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from company_info
+    </select>
+
+    <select id="findPageConditions" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from company_info
+        <where>
+            <if test="regionId !=null">
+                and region_id=#{regionId,jdbcType=BIGINT}
+            </if>
+            <if test="id !=null">
+                and id =#{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId !=null">
+                and user_id =#{userId,jdbcType=BIGINT}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.diane.manage.vo.AddressQuery">
+        update address_info
+        <set>
+            <if test="address != null and address!=''">
+                address_name =#{address},
+            </if>
+            <if test="phone != null and phone!=''">
+                phone =#{phone},
+            </if>
+            <if test="openid != null and openid!=''">
+                openid =#{openid},
+            </if>
+            <if test="regionId != null ">
+                region_id =#{regionId},
+            </if>
+            <if test="createBy != null and createBy !=''">
+                create_by =#{createBy},
+            </if>
+            <if test="createTime != null ">
+                create_time =#{createTime},
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!=''">
+                last_update_by =#{lastUpdateBy},
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time =#{lastUpdateTime},
+            </if>
+            <if test="flag != null">
+                flag =#{flag},
+            </if>
+            <if test="setDefault !=null ">
+                set_default =#{setDefault},
+            </if>
+            <if test="contact !=null ">
+                contact =#{contact},
+            </if>
+            <if test="addressLabel !=null ">
+              address_label=  #{addressLabel},
+            </if>
+        </set>
+        where id = #{addressId,jdbcType=BIGINT}
+    </update>
+
+<!--    <update id="deleteCompanyInfo" parameterType="com.diane.manage.model.CompanyInfo">-->
+<!--        update company_info-->
+<!--        <set>-->
+<!--            flag=0-->
+<!--        </set>-->
+<!--        where id = #{id}-->
+<!--    </update>-->
+
+    <select id="listAddressInfoCondition" parameterType="com.diane.manage.vo.AddressQuery" resultMap="BaseResultMap">
+        select   ai.id, ai.address_name, ai.phone, ai.contact,ai.flag,ai.address_label_id,ai.set_default,ai.openid,
+        ai.region_id,dr.region_name,ai.address_label
+        from address_info ai
+        left join delivery_region dr on dr.id=ai.region_id
+        <where>
+            ai.flag=0
+            <if test="regionId !=null">
+                and ai.region_id =#{regionId}
+            </if>
+            <if test="openid !=null and openid !=''">
+                and ai.openid =#{openid}
+            </if>
+
+        </where>
+    </select>
+
+    <select id="countAddressInfoCondition" parameterType="com.diane.manage.vo.AddressQuery" resultType="java.lang.Integer">
+    select  count(0) from address_info ai  left join delivery_region dr on dr.id=ai.region_id
+    <where>
+        ai.flag=0
+        <if test="regionId !=null">
+            and ai.region_id =#{regionId}
+        </if>
+        <if test="openid !=null and openid !=''">
+            and ai.openid =#{openid}
+        </if>
+    </where>
+    </select>
+
+
+
+    <update id="changeDefaultAddress" parameterType="com.diane.manage.vo.AddressQuery">
+        update address_info
+        <set>
+        set_default =0
+        </set>
+        <where>
+        flag =0
+        <if test="openid !=null and openid !=''">
+            and openid=#{openid}
+        </if>
+        <if test="regionId !=null">
+            and region_id =#{regionId}
+        </if>
+        </where>
+    </update>
+
+
+</mapper>

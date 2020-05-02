@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.NoticeInfoMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.model.NoticeInfo">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="notice_title" jdbcType="VARCHAR" property="noticeTitle" />
+        <result column="notice_content" jdbcType="VARCHAR" property="noticeContent" />
+        <result column="create_by" jdbcType="BIGINT" property="createBy" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="last_update_by" jdbcType="BIGINT" property="lastUpdateBy" />
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="flag" jdbcType="TINYINT" property="flag" />
+        <result column="region_id" jdbcType="BIGINT" property="regionId" />
+        <result column="region_name" jdbcType="BIGINT" property="regionName" />
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, notice_title, notice_content, create_by, create_time, last_update_by, last_update_time,
+    flag
+  </sql>
+
+
+    <insert id="insertSelective" parameterType="com.diane.manage.model.NoticeInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into notice_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="noticeTitle != null and noticeTitle!=''">
+                notice_title,
+            </if>
+            <if test="noticeContent != null and noticeContent!=''">
+                notice_content,
+            </if>
+            <if test="createBy != null and createBy !=''">
+                create_by,
+            </if>
+            <if test="createTime != null ">
+                create_time,
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!=''">
+                last_update_by,
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time,
+            </if>
+            <if test="regionId != null">
+                region_id,
+            </if>
+             <if test="flag != null">
+                flag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="noticeTitle != null and noticeTitle!=''">
+                #{noticeTitle},
+            </if>
+            <if test="noticeContent != null and noticeContent!=''">
+                #{noticeContent},
+            </if>
+            <if test="createBy != null and createBy !=''">
+                #{createBy},
+            </if>
+            <if test="createTime != null ">
+                #{createTime},
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!=''">
+                #{lastUpdateBy},
+            </if>
+            <if test="lastUpdateTime != null ">
+                #{lastUpdateTime},
+            </if>
+            <if test="regionId != null">
+                #{regionId},
+            </if>
+             <if test="flag != null">
+                #{flag},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="findPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from notice_info
+        where flag = 1
+    </select>
+
+    <select id="findPageByRegion" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select id,notice_title,notice_content,create_time,last_update_time
+        from notice_info
+        where region_id=#{regionId}
+        and flag = 1
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.diane.manage.model.NoticeInfo">
+        update notice_info
+        <set>
+            <if test="noticeTitle != null and noticeTitle !=''">
+                notice_title = #{noticeTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="noticeContent != null and noticeContent!=''">
+                notice_content = #{noticeContent,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastUpdateBy != null">
+                last_update_by = #{lastUpdateBy,jdbcType=BIGINT},
+            </if>
+            <if test="lastUpdateTime != null">
+                last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="flag != null">
+                flag = #{flag,jdbcType=TINYINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteNoticeInfo" parameterType="com.diane.manage.model.NoticeInfo">
+        update notice_info
+        <set>
+            flag = 0
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="getOneNotice" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select id,notice_title,notice_content from notice_info
+        where
+        flag =1
+        and region_id=#{regionId}
+        order by create_time desc
+        limit 1
+    </select>
+
+</mapper>

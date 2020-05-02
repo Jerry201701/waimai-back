@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.RevenueStatisticsMapper">
+
+
+
+    <insert id="addRevenueStatistics" parameterType="com.diane.manage.model.RevenueStatistics" useGeneratedKeys="true" keyProperty="id">
+        insert into revenue_statistics
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shopId != null ">
+                shop_id,
+            </if>
+            <if test="companyId != null ">
+                company_id,
+            </if>
+            <if test="totalIncome != null ">
+                total_income,
+            </if>
+            <if test="platFormReward != null ">
+                plat_form_reward,
+            </if>
+            <if test="shopReward != null ">
+                shop_reward,
+            </if>
+            <if test="deliveryReward != null">
+                delivery_reward,
+            </if>
+            <if test="createTime != null ">
+                create_time,
+            </if>
+               <if test="orderNumber != null ">
+                order_number,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="shopId != null ">
+                #{shopId},
+            </if>
+            <if test="companyId != null ">
+                #{companyId},
+            </if>
+            <if test="totalIncome != null ">
+                #{totalIncome},
+            </if>
+            <if test="platFormReward != null ">
+                #{platFormReward},
+            </if>
+            <if test="shopReward != null ">
+                #{shopReward},
+            </if>
+            <if test="deliveryReward != null">
+                #{deliveryReward},
+            </if>
+            <if test="createTime != null ">
+                #{createTime},
+            </if>
+            <if test="orderNumber != null ">
+                #{orderNumber},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

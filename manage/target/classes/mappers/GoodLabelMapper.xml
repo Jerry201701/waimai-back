@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.GoodLabelMapper">
+    <!--    <resultMap id="BaseResultMap" type="com.diane.manage.model.CategoryInfo">-->
+    <!--        <id column="id" jdbcType="BIGINT" property="id" />-->
+    <!--        <result column="category_name" jdbcType="VARCHAR" property="categoryName" />-->
+    <!--        <result column="remark" jdbcType="VARCHAR" property="remark" />-->
+    <!--        <result column="label" jdbcType="VARCHAR" property="label" />-->
+    <!--        <result column="create_by" jdbcType="BIGINT" property="createBy" />-->
+    <!--        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />-->
+    <!--        <result column="last_update_by" jdbcType="BIGINT" property="lastUpdateBy" />-->
+    <!--        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />-->
+    <!--        <result column="flag" jdbcType="TINYINT" property="flag" />-->
+    <!--        <result column="logo_url" jdbcType="VARCHAR" property="logoUrl" />-->
+    <!--    </resultMap>-->
+    <!--    <sql id="Base_Column_List">-->
+    <!--    id, category_name, label, create_by, create_time, last_update_by, last_update_time,-->
+    <!--    flag,remark,logo_url-->
+    <!--  </sql>-->
+
+
+    <insert id="insertSelective" parameterType="com.diane.manage.model.GoodLabel" useGeneratedKeys="true" keyProperty="id">
+        insert into good_label
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="labelName != null and labelName !=''">
+                label_name,
+            </if>
+            <if test="labelPrice !=null">
+                label_price,
+            </if>
+             <if test="labelStock !=null">
+                 label_stock,
+            </if>
+              <if test="goodId !=null">
+                 good_id,
+            </if>
+             <if test="flag !=null">
+                 flag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="labelName != null and labelName !=''">
+                #{labelName},
+            </if>
+            <if test="labelPrice !=null">
+                #{labelPrice},
+            </if>
+            <if test="labelStock !=null">
+                #{labelStock},
+            </if>
+            <if test="goodId !=null">
+                #{goodId},
+            </if>
+            <if test="flag !=null">
+                #{flag},
+            </if>
+        </trim>
+    </insert>
+
+    <!--    <select id="findPage" resultMap="BaseResultMap">-->
+    <!--        select-->
+    <!--        <include refid="Base_Column_List" />-->
+    <!--        from delivery_category-->
+    <!--    </select>-->
+
+        <update id="updateByPrimaryKeySelective" parameterType="com.diane.manage.model.GoodLabel">
+            update good_label
+            <set>
+                <if test="labelName != null and labelName !=''">
+                  label_name=  #{labelName},
+                </if>
+                <if test="labelPrice !=null">
+                   label_price= #{labelPrice},
+                </if>
+                <if test="labelStock !=null">
+                   label_stock= #{labelStock},
+                </if>
+                 <if test="goodId !=null">
+                   good_id= #{goodId},
+                </if>
+                  <if test="flag !=null">
+                   flag= #{flag},
+                </if>
+            </set>
+            where id = #{id,jdbcType=BIGINT}
+        </update>
+    <delete id="deleteLabelByGood" parameterType="java.lang.Long">
+        delete from good_label where id=#{id}
+    </delete>
+    <select id="listLabelByGoodId" parameterType="java.lang.Long" resultType="java.lang.Long">
+        select id from good_label where good_id=#{goodId}
+    </select>
+    <insert id="copyGoodLabel" parameterType="com.diane.manage.vo.good.CopyGoodVo">
+    insert into good_label (good_id,flag,label_name,label_price,label_stock)
+    SELECT #{targetGoodId},flag,label_name,label_price,label_stock FROM good_label where good_id=#{sourceGoodId};
+    </insert>
+
+</mapper>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.BargainRecordMapper">
+    <resultMap id="BargainRecordResultMap" type="com.diane.manage.model.BargainRecord">
+        <result column="id" jdbcType="BIGINT" property="id" />
+        <result column="good_id" jdbcType="BIGINT" property="goodId" />
+        <result column="good_price" jdbcType="BIGINT" property="goodPrice" />
+        <result column="bargain_id" jdbcType="BIGINT" property="bargainId" />
+        <result column="openid" jdbcType="VARCHAR" property="openid" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="bargainTime" />
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+        <result column="user_pic_url" jdbcType="VARCHAR" property="userPicUrl" />
+        <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+        <result column="bargain_price" jdbcType="SMALLINT" property="bargainPrice" />
+        <result column="cut_off" jdbcType="SMALLINT" property="cutOff" />
+    </resultMap>
+
+    <resultMap id="BargainConditionResultMap" type="com.diane.manage.vo.activity.ActivityConditionVo">
+        <result column="bargain_times" jdbcType="INTEGER" property="bargainTimes" />
+        <result column="max_bargain_time" jdbcType="INTEGER" property="bargainLimit" />
+        <result column="min_bargain_time" jdbcType="INTEGER" property="minBargainLimit" />
+        <result column="bargain_time_limit" jdbcType="INTEGER" property="bargainTimeLimit" />
+        <result column="min_bargain_payment" jdbcType="INTEGER" property="minBargainPayment" />
+        <result column="bargain_id" jdbcType="BIGINT" property="bargain_id" />
+        <result column="activity_id" jdbcType="BIGINT" property="activityId" />
+        <result column="bargain_validity" jdbcType="INTEGER" property="bargainValidity" />
+        <result column="good_id" jdbcType="BIGINT" property="goodId" />
+        <result column="bargain_current_price" jdbcType="INTEGER" property="bargainCurrentPrice" />
+        <result column="bargain_time" jdbcType="TIMESTAMP" property="bargainTime" />
+    </resultMap>
+
+
+    <insert id="addBargainRecord" parameterType="com.diane.manage.model.BargainRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into bargain_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="openid != null and openid!=''">
+                openid,
+            </if>
+            <if test="goodId != null ">
+                good_id,
+            </if>
+            <if test="bargainId != null ">
+                bargain_id,
+            </if>
+            <if test="bargainTime != null ">
+                create_time,
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time,
+            </if>
+            <if test="bargainPrice != null ">
+                bargain_price,
+            </if>
+             <if test="activityId != null ">
+                 activity_id,
+            </if>
+              <if test="cutOff != null ">
+                 cut_off,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="openid != null and openid!=''">
+                #{openid},
+            </if>
+            <if test="goodId != null ">
+                #{goodId},
+            </if>
+            <if test="bargainId != null ">
+                #{bargainId},
+            </if>
+            <if test="bargainTime != null ">
+                #{bargainTime},
+            </if>
+            <if test="lastUpdateTime != null ">
+                #{lastUpdateTime},
+            </if>
+            <if test="bargainPrice != null ">
+                #{bargainPrice},
+            </if>
+             <if test="activityId != null ">
+                #{activityId},
+            </if>
+            <if test="cutOff != null ">
+                #{cutOff},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="findBargainRecordById" parameterType="java.lang.Long" resultMap="BargainRecordResultMap">
+        select record.id,record.good_id,record.bargain_id,record.openid,record.create_time,record.last_update_time,
+        record.bargain_price,wei.nick_name,wei.head_icon user_pic_url,good.price good_price,record.cut_off
+        from bargain_record record
+        left join wei_user_info wei on wei.openid=record.openid
+        left join good_info good on good.id=record.good_id
+        where record.bargain_id=#{bargainId}
+    </select>
+    
+    <select id="findLatestRecord" parameterType="java.lang.Long" resultMap="BargainRecordResultMap">
+        select record.bargain_price,good.price good_price from bargain_record record
+        left join good_info good on good.id=record.good_id
+        where record.bargain_id=#{bargainId}
+        ORDER BY record.create_time desc LIMIT 1
+    </select>
+
+    <select id="findBargainConditions" resultMap="BargainConditionResultMap" >
+    select bargain.bargain_time,bargain.max_bargain_time,bargain.min_bargain_payment,bargain.bargain_time_limit,
+    bargain.bargain_validity,bargain.good_id,IFNULL(record.bargain_times,0) bargain_times,
+    IFNULL(record.bargain_current_price,0) bargain_current_price, bargain.min_bargain_time
+    from (select b.create_time bargain_time,a.max_bargain_time,a.min_bargain_payment,a.min_bargain_time,
+    a.bargain_time_limit,a.bargain_validity,a.good_id,b.id bargain_id
+    from bargain_activity b,market_activity a  where a.id=b.activity_id and  b.id=#{bargainId})bargain
+    left join (SELECT count(*) bargain_times,min(bargain_price) bargain_current_price,bargain_id FROM bargain_record
+    group by bargain_id having bargain_id=#{bargainId}) record on bargain.bargain_id=record.bargain_id
+    </select>
+
+</mapper>

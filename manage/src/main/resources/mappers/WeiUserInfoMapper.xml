@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.WeiUserInfoMapper">
+    <resultMap id="WeiUserInfoResultMap" type="com.diane.manage.model.WeiUserInfo">
+        <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+        <result column="phone" jdbcType="VARCHAR" property="phone" />
+        <result column="head_icon" jdbcType="VARCHAR" property="headIcon" />
+        <result column="id" jdbcType="BIGINT" property="id" />
+        <result column="openid" jdbcType="VARCHAR" property="openid" />
+        <result column="sex" jdbcType="TINYINT" property="sex" />
+        <result column="union_id" jdbcType="VARCHAR" property="unionId" />
+    </resultMap>
+
+    <insert id="addUserInfo" parameterType="com.diane.manage.model.WeiUserInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into wei_user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="nickName != null and nickName!=''">
+                nick_name,
+            </if>
+              <if test="sex != null ">
+                sex,
+            </if>
+            <if test="phone != null and phone!=''">
+                phone,
+            </if>
+            <if test="openid != null and openid!=''">
+                openid,
+            </if>
+            <if test="createTime != null ">
+                create_time,
+            </if>
+            <if test="headIcon != null and headIcon!=''">
+                head_icon,
+            </if>
+            <if test="unionId != null and unionId!=''">
+                union_id,
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="nickName != null and nickName!=''">
+                #{nickName},
+            </if>
+            <if test="sex != null ">
+                #{sex},
+            </if>
+            <if test="phone != null and phone!=''">
+                #{phone},
+            </if>
+            <if test="openid != null and openid!=''">
+                #{openid},
+            </if>
+            <if test="createTime != null ">
+                #{createTime},
+            </if>
+            <if test="headIcon != null and headIcon!=''">
+                #{headIcon},
+            </if>
+            <if test="unionId != null and unionId!=''">
+                #{unionId},
+            </if>
+            <if test="lastUpdateTime != null ">
+                #{lastUpdateTime},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="findUserInfo" parameterType="java.lang.String" resultMap="WeiUserInfoResultMap">
+        select  id,sex,nick_name,head_icon,phone,openid,union_id from wei_user_info where openid=#{openid}
+    </select>
+
+    <delete id="deleteUserInfo" parameterType="java.lang.String">
+        delete from wei_user_info where openid=#{openid}
+    </delete>
+    <select id="aaa">
+        bargain
+    </select>
+
+
+</mapper>

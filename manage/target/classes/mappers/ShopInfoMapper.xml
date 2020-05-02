@@ -1,0 +1,638 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diane.manage.dao.ShopMapper">
+    <resultMap id="BaseResultMap" type="com.diane.manage.model.ShopInfo">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="boss_name" jdbcType="VARCHAR" property="bossName"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName"/>
+        <result column="openid" jdbcType="VARCHAR" property="openid"/>
+        <result column="region_id" jdbcType="BIGINT" property="regionId"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="last_update_by" jdbcType="BIGINT" property="lastUpdateBy"/>
+        <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime"/>
+        <result column="flag" jdbcType="TINYINT" property="flag"/>
+        <result column="delivery_range" jdbcType="TINYINT" property="deliveryRange"/>
+        <result column="base_price" jdbcType="BIGINT" property="basePrice"/>
+        <result column="delivery_region_desc" jdbcType="VARCHAR" property="deliveryRegionDesc"/>
+        <result column="shop_desc" jdbcType="VARCHAR" property="shopDesc"/>
+        <result column="inventory" jdbcType="TINYINT" property="inventory"/>
+        <result column="display_inventory" jdbcType="TINYINT" property="displayInventory"/>
+        <result column="open_time" jdbcType="VARCHAR" property="openTime"/>
+        <result column="close_time" jdbcType="VARCHAR" property="closeTime"/>
+        <result column="verified" jdbcType="TINYINT" property="verified"/>
+        <result column="closed" jdbcType="TINYINT" property="closed"/>
+        <result column="display" jdbcType="TINYINT" property="display"/>
+        <result column="auto_receipt" jdbcType="TINYINT" property="autoReceipt"/>
+        <result column="category_id" jdbcType="BIGINT" property="categoryId"/>
+        <result column="shop_status" jdbcType="TINYINT" property="shopStatus"/>
+        <result column="region_name" jdbcType="TINYINT" property="regionName"/>
+        <result column="pack_charges" jdbcType="BIGINT" property="packCharges"/>
+        <result column="extra_price" jdbcType="BIGINT" property="extraPrice"/>
+        <result column="overlay" jdbcType="TINYINT" property="overlay"/>
+        <result column="daily_inventory" jdbcType="TINYINT" property="dailyInventory"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="collection_status" jdbcType="TINYINT" property="shopFav"/>
+        <collection property="deliveryFee" resultMap="DeliveryRuleResultMap"> </collection>
+        <collection property="fullReduction" resultMap="FullReductionResultMap"> </collection>
+<!--        <collection property="comments" resultMap="commentResultMap"> </collection>-->
+<!--        <collection property="categoryList" resultMap="categoryResultMap"></collection>-->
+<!--        <collection property="pictureInfoList" resultMap="pictureResultMap"> </collection>-->
+    </resultMap>
+
+    <resultMap id="FullReductionResultMap" type="com.diane.manage.vo.activity.FullReductionVo">
+        <result column="price" jdbcType="SMALLINT" property="price"/>
+        <result column="limit_price" jdbcType="SMALLINT" property="limitPrice"/>
+
+    </resultMap>
+
+    <resultMap id="CommentResultMap" type="com.diane.manage.model.DeliveryComment">
+        <id column="comment_id" jdbcType="BIGINT" property="id" />
+        <result column="speed" jdbcType="TINYINT" property="speed" />
+        <result column="attitude" jdbcType="TINYINT" property="attitude" />
+        <result column="comment_content" jdbcType="VARCHAR" property="content" />
+        <result column="openid" jdbcType="VARCHAR" property="openid" />
+    </resultMap>
+
+    <resultMap id="CategoryResultMap" type="com.diane.manage.model.CategoryInfo">
+        <id column="category_id" jdbcType="BIGINT" property="id" />
+        <result column="category_name" jdbcType="TINYINT" property="categoryName" />
+    </resultMap>
+
+    <resultMap id="PictureResultMap" type="com.diane.manage.model.PictureInfo">
+        <id column="picture_id" jdbcType="BIGINT" property="id" />
+        <result column="picture_url" jdbcType="TINYINT" property="pictureUrl" />
+    </resultMap>
+
+
+
+    <resultMap id="SearchResultMap" type="com.diane.manage.vo.shop.SearchShopVo">
+        <result column="shop_id" jdbcType="BIGINT" property="shopId"/>
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName"/>
+        <result column="month_sale" jdbcType="VARCHAR" property="monthSale"/>
+        <result column="delivery_time" jdbcType="VARCHAR" property="deliveryTime"/>
+        <result column="base_price" jdbcType="VARCHAR" property="basePrice"/>
+        <result column="delivery_fee" jdbcType="VARCHAR" property="deliveryFee"/>
+        <result column="sale_fee" jdbcType="VARCHAR" property="selfFee"/>
+        <result column="discount" jdbcType="VARCHAR" property="discount"/>
+        <result column="shop_stars" jdbcType="VARCHAR" property="shopStars"/>
+        <collection property="shopPicUrl" ofType="java.lang.String">
+            <constructor>
+                <arg column="shop_pic" />
+            </constructor>
+        </collection>
+    </resultMap>
+
+    <resultMap id="ShopBasicResultMap" type="com.diane.manage.vo.shop.ShopBasicInfoRespVo">
+        <result column="shop_id" jdbcType="BIGINT" property="shopId"/>
+        <result column="region_id" jdbcType="BIGINT" property="regionId"/>
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName"/>
+        <result column="balance" jdbcType="INTEGER" property="balance"/>
+        <result column="good_number" jdbcType="INTEGER" property="goodNumber"/>
+        <result column="income" jdbcType="INTEGER" property="income"/>
+        <result column="order_number" jdbcType="INTEGER" property="orderNumber"/>
+        <result column="un_handle" jdbcType="INTEGER" property="unhandle"/>
+        <collection property="shopPicUrl" ofType="java.lang.String">
+            <constructor>
+                <arg column="picture_url" />
+            </constructor>
+        </collection>
+    </resultMap>
+
+    <resultMap id="ShopTreeResultMap" type="com.diane.manage.vo.income.CompanyTreeVo">
+        <id column="shop_id" jdbcType="VARCHAR" property="id" />
+        <result column="shop_name" jdbcType="VARCHAR" property="name" />
+    </resultMap>
+
+    <resultMap id="DeliveryRuleResultMap" type="com.diane.manage.vo.delivery.DeliveryRuleVo">
+        <result column="calculation_rule" jdbcType="BIGINT" property="type"/>
+        <result column="fixed_amount" jdbcType="SMALLINT" property="fixValue"/>
+        <result column="settling_rate" jdbcType="SMALLINT" property="rateValue"/>
+        <result column="upper_value" jdbcType="SMALLINT" property="maxValue"/>
+        <result column="bottom_value" jdbcType="SMALLINT" property="minValue"/>
+    </resultMap>
+    <resultMap id="ShopRuleResultMap" type="com.diane.manage.vo.shop.RuleShopVo">
+        <result column="shop_id" jdbcType="BIGINT" property="shopId"/>
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName"/>
+        <result column="company_name" jdbcType="VARCHAR" property="companyName"/>
+        <result column="company_id" jdbcType="BIGINT" property="companyId"/>
+
+
+    </resultMap>
+
+    <resultMap id="RuleModelResultMap" type="com.diane.manage.model.SettlingModel">
+        <result column="fixed_amount" jdbcType="SMALLINT" property="fixedAmount" />
+        <result column="settling_rate" jdbcType="SMALLINT" property="settlingRate" />
+        <result column="upper_value" jdbcType="SMALLINT" property="upperValue" />
+        <result column="bottom_value" jdbcType="SMALLINT" property="bottomValue" />
+        <result column="calculation_rule" jdbcType="SMALLINT" property="calculationRule" />
+        <result column="percentage" jdbcType="SMALLINT" property="percentage" />
+        <result column="calculation_rule" jdbcType="SMALLINT" property="calculationRule" />
+
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+    id, shop_name, phone, address, create_by, create_time, last_update_by, last_update_time,
+    flag,delivery_range,base_price,delivery_region_desc,region_id,shop_desc,inventory,display_inventory,
+    open_time,close_time,verified,closed,display,auto_receipt,category_id,shop_status
+  </sql>
+
+
+    <select id="findPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from shop_info
+        order  by create_time desc
+    </select>
+     <select id="findPageByCondition" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List" />
+        from shop_info
+        where shop_status=#{shopStatus}
+        order by create_time desc
+    </select>
+
+    <select id="listShopByPage" resultMap="BaseResultMap" parameterType="com.diane.manage.vo.shop.QueryShopVo">
+        select
+        <include refid="Base_Column_List" />
+        from shop_info
+        <where>
+            flag=0
+            <if test="regionId !=null">
+                and region_id =#{regionId}
+            </if>
+            <if test="companyId !=null">
+                and company_id =#{companyId}
+            </if>
+            <if test="status !=null">
+               and shop_status =#{shopStatus}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+
+
+
+    <insert id="insertSelective" parameterType="com.diane.manage.model.ShopInfo" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into shop_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="shopName != null and shopName!=''">
+                shop_name,
+            </if>
+            <if test="phone != null and phone!=''">
+                phone,
+            </if>
+            <if test="address != null and address!=''">
+                address,
+            </if>
+            <if test="companyId != null ">
+                company_id,
+            </if>
+            <if test="regionId != null ">
+                region_id,
+            </if>
+            <if test="deliveryRange != null ">
+                delivery_range,
+            </if>
+            <if test="basePrice != null ">
+                base_price,
+            </if>
+            <if test="deliveryRegionDesc != null and deliveryRegionDesc!=''">
+                delivery_region_desc,
+            </if>
+            <if test="shopDesc != null and shopDesc !=''">
+                shop_desc,
+            </if>
+            <if test="inventory != null">
+                inventory,
+            </if>
+            <if test="displayInventory != null">
+                display_inventory,
+            </if>
+            <if test="openTime != null">
+                open_time,
+            </if>
+            <if test="closeTime != null">
+                close_time,
+            </if>
+            <if test="verified != null">
+                verified,
+            </if>
+            <if test="closed != null">
+                closed,
+            </if>
+            <if test="display != null">
+                display,
+            </if>
+            <if test="autoReceipt != null">
+                auto_receipt,
+            </if>
+            <if test="categoryId != null">
+                category_id,
+            </if>
+            <if test="createBy != null and createBy !=''">
+                create_by,
+            </if>
+            <if test="createTime != null ">
+                create_time,
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!=''">
+                last_update_by,
+            </if>
+            <if test="lastUpdateTime != null ">
+                last_update_time,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+            <if test="shopStatus != null">
+                shop_status,
+            </if>
+             <if test="extraPrice != null">
+                 extra_price,
+            </if>
+              <if test="packCharges != null">
+                  pack_charges,
+            </if>
+            <if test="overlay != null">
+                overlay,
+            </if>
+             <if test="dailyInventory != null">
+                 daily_inventory,
+            </if>
+              <if test="content != null and content !=''">
+                  content,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="shopName != null and shopName!=''">
+                #{shopName},
+            </if>
+            <if test="phone != null and phone!=''">
+                #{phone},
+            </if>
+            <if test="address != null and address!=''">
+                #{address},
+            </if>
+            <if test="companyId != null ">
+                #{companyId},
+            </if>
+            <if test="regionId != null ">
+                #{regionId},
+            </if>
+            <if test="deliveryRange != null ">
+                #{deliveryRange},
+            </if>
+            <if test="basePrice != null ">
+                #{basePrice},
+            </if>
+            <if test="deliveryRegionDesc != null and deliveryRegionDesc!=''">
+                #{deliveryRegionDesc},
+            </if>
+            <if test="shopDesc != null and shopDesc !=''">
+                #{shopDesc},
+            </if>
+            <if test="inventory != null">
+                #{inventory},
+            </if>
+            <if test="displayInventory != null">
+                #{displayInventory},
+            </if>
+            <if test="openTime != null">
+                #{openTime},
+            </if>
+            <if test="closeTime != null">
+                #{closeTime},
+            </if>
+            <if test="verified != null">
+                #{verified},
+            </if>
+            <if test="closed != null">
+                #{closed},
+            </if>
+            <if test="display != null">
+                #{display},
+            </if>
+            <if test="autoReceipt != null">
+                #{autoReceipt},
+            </if>
+            <if test="categoryId != null">
+                #{categoryId},
+            </if>
+            <if test="createBy != null and createBy !=''">
+                #{createBy},
+            </if>
+            <if test="createTime != null ">
+                #{createTime},
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!=''">
+                #{lastUpdateBy},
+            </if>
+            <if test="lastUpdateTime != null ">
+                #{lastUpdateTime},
+            </if>
+            <if test="flag != null">
+                #{flag},
+            </if>
+            <if test="shopStatus != null">
+                #{shopStatus},
+            </if>
+            <if test="extraPrice != null">
+                #{extraPrice},
+            </if>
+            <if test="packCharges != null">
+                #{packCharges},
+            </if>
+             <if test="overlay != null">
+                #{overlay},
+            </if>
+            <if test="dailyInventory != null">
+                #{dailyInventory},
+            </if>
+             <if test="content != null and content !=''">
+                #{content},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.diane.manage.model.CompanyInfo">
+        update shop_info
+        <set>
+            <if test="shopName != null and shopName!=''">
+               shop_name = #{shopName},
+            </if>
+            <if test="phone != null and phone!=''">
+               phone = #{phone},
+            </if>
+            <if test="address != null and address!=''">
+              address =  #{address},
+            </if>
+            <if test="companyId != null ">
+              company_id =  #{companyId},
+            </if>
+            <if test="regionId != null ">
+              region_id =  #{regionId},
+            </if>
+            <if test="deliveryRange != null ">
+             delivery_range=   #{deliveryRange},
+            </if>
+            <if test="basePrice != null ">
+              base_price =  #{basePrice},
+            </if>
+            <if test="deliveryRegionDesc != null and deliveryRegionDesc!=''">
+              delivery_region_desc =  #{deliveryRegionDesc},
+            </if>
+            <if test="shopDesc != null and shopDesc !=''">
+             shop_desc =   #{shopDesc},
+            </if>
+            <if test="inventory != null">
+             inventory =   #{inventory},
+            </if>
+            <if test="displayInventory != null">
+              display_inventory=  #{displayInventory},
+            </if>
+            <if test="openTime != null">
+              open_time =  #{openTime},
+            </if>
+            <if test="closeTime != null">
+              close_time=  #{closeTime},
+            </if>
+            <if test="verified != null">
+             verified =   #{verified},
+            </if>
+            <if test="closed != null">
+              closed =  #{closed},
+            </if>
+            <if test="display != null">
+             display =   #{display},
+            </if>
+            <if test="autoReceipt != null">
+              auto_receipt=  #{autoReceipt},
+            </if>
+            <if test="categoryId != null">
+              category_id=  #{categoryId},
+            </if>
+            <if test="createBy != null and createBy !=''">
+             create_by =   #{createBy},
+            </if>
+            <if test="createTime != null ">
+             create_time=   #{createTime},
+            </if>
+            <if test="lastUpdateBy != null and lastUpdateBy!=''">
+              last_update_by=  #{lastUpdateBy},
+            </if>
+            <if test="lastUpdateTime != null ">
+              last_update_time=  #{lastUpdateTime},
+            </if>
+            <if test="flag != null">
+              flag=  #{flag},
+            </if>
+            <if test="shopStatus != null">
+               shop_status= #{shopStatus},
+            </if>
+            <if test="extraPrice != null">
+             extra_price =   #{extraPrice},
+            </if>
+            <if test="packCharges != null">
+              pack_charges =  #{packCharges},
+            </if>
+            <if test="overlay != null">
+                overlay =  #{overlay},
+            </if>
+            <if test="dailyInventory != null">
+               daily_inventory = #{dailyInventory},
+            </if>
+              <if test="content != null">
+               content = #{content},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteShopInfo" parameterType="com.diane.manage.model.ShopInfo">
+        update shop_info
+        <set>
+            flag=1
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <select id="findPageByCompanyId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select  <include refid="Base_Column_List" />  from shop_info
+        <where>
+        <if test="companyId !=null">
+         company_id=#{companyId}
+        </if>
+        </where>
+    </select>
+
+    <select id="listShopByConditions" parameterType="com.diane.manage.model.ShopInfo" resultMap="BaseResultMap">
+        select  <include refid="Base_Column_List" />  from shop_info
+        <where>
+        flag = 0
+        <if test="id !=null">
+            and id =#{id}
+        </if>
+            <if test="companyId !=null">
+             and   company_id=#{companyId}
+            </if>
+             <if test="regionId !=null">
+             and   region_id=#{regionId}
+            </if>
+             <if test="categoryId !=null">
+             and   category_id=#{categoryId}
+            </if>
+            <if test="id !=null">
+            and id=#{id}
+            </if>
+            <if test="shopStatus !=null and shopStatus !=0">
+            and shop_status =#{shopStatus}
+            </if>
+            <if test="keyWord !=null and keyWord != ''">
+                <bind name="keyWord" value="'%' + keyWord + '%'" />
+                and shop_name like CONCAT('%',#{keyWord},'%')
+            </if>
+
+        </where>
+
+
+    </select>
+    <select id="getShopDetails" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select si.id, si.shop_name, si.phone, si.address, si.create_time,si.delivery_range,si.base_price,si.extra_price,
+        si.delivery_region_desc,si.region_id,si.shop_desc,si.inventory,si.display_inventory,si.open_time,si.close_time,
+        si.verified,si.closed,si.display,si.auto_receipt,si.shop_status,si.pack_charges,dc.id comment_id,dc.speed,si.daily_inventory,
+        c.category_name,c.category_id,dc.attitude,dc.comment_content,dc.openid,dr.region_name,p.id picture_id,p.picture_url,si.overlay,si.content
+        from shop_info si left join delivery_comment dc on si.id=dc.shop_id
+        left join delivery_region dr on dr.id=si.region_id
+        left join picture_info p on p.shop_id=si.id
+        left join (select sc.shop_id,sc.category_id,c.category_name from shop_category sc left join delivery_category c on sc.category_id=c.id ) c on c.shop_id=si.id
+        where si.id=#{shopId,jdbcType=BIGINT}
+        and si.flag =0
+
+    </select>
+
+
+    <select id="getDetailById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select si.id, si.shop_name, si.phone, si.address, si.create_time,si.delivery_range,si.base_price,si.extra_price,
+        si.delivery_region_desc,si.region_id,si.shop_desc,si.inventory,si.display_inventory,si.open_time,si.close_time,
+        si.verified,si.closed,si.display,si.auto_receipt,si.shop_status,si.pack_charges,si.daily_inventory,si.overlay,
+        si.content,dr.region_name,collection.flag collection_status,model.calculation_rule,model.upper_value,model.bottom_value,
+        model.fixed_amount,model.settling_rate,reduction.price,reduction.limit_price
+        from shop_info si
+        left join delivery_region dr on dr.id=si.region_id
+        left join shop_collection collection on collection.shop_id=si.id
+        left join settling_model model on model.id=si.rule_id
+        left join (select price,limit_price,shop_id from full_reduction where flag=0) reduction on si.id=reduction.shop_id
+        where si.flag =0
+        <if test="shopId !=null">
+            and  si.id=#{shopId,jdbcType=BIGINT}
+        </if>
+    </select>
+
+
+    <select id="sortShopList" resultMap="SearchResultMap">
+        select  s.id shop_id,s.shop_name,p.picture_url shop_pic,s.base_price
+        from  shop_info s
+        left join picture_info p on p.shop_id=s.id
+        where  (s.shop_status =1 or shop_status=5) and s.region_id=#{regionId}
+
+    </select>
+
+    <select id="shopBasicInfoById" parameterType="java.lang.Long" resultMap="ShopBasicResultMap">
+        select  s.id shop_id,s.shop_name,p.picture_url picture_url
+        from  shop_info s
+        left join picture_info p on p.shop_id=s.id
+        where s.company_id=#{companyId}
+    </select>
+
+    <select id="listShopsByCompany" parameterType="java.lang.Long" resultMap="ShopTreeResultMap">
+        select CONCAT('S',id) shop_id,shop_name from  shop_info where company_id =#{companyId}
+    </select>
+    <update id="shopDeliverySettlementWay">
+        update shop_info set settlement_way=#{settlementId}  where id =#{shopId}
+    </update>
+    <update id="changeOrderIncome">
+        update shop_info set order_income = #{income}  where id=#{shopId}
+    </update>
+
+    <update id="addCodeUrl">
+         update shop_info set code_url = #{codeUrl}  where id=#{shopId}
+
+    </update>
+    <select id="findShopCode" resultType="java.lang.String" parameterType="java.lang.Long">
+        select code_url from shop_info where id=#{shopId}
+    </select>
+    
+    
+    <select id="searchShopByKeyWord" resultMap="SearchResultMap">
+            select shop.id shop_id,shop.shop_name,p.picture_url shop_pic,shop.base_price,s.max_sale month_sale
+            from shop_info shop
+            left join picture_info p on p.shop_id=shop.id
+            left join (select max(sale.month_sale) max_sale,sale.shop_id  from (select sum(pay_amount) month_sale ,
+            DATE_FORMAT(order_time,'%Y%m') m,shop_id from delivery_order group by shop_id,m) sale group by sale.shop_id ) s on shop.id=s.shop_id
+            <where>
+                shop.region_id=#{regionId}
+                <if test="keyWord !=null and keyWord != ''">
+                    <bind name="keyWord" value="'%' + keyWord + '%'" />
+                    and shop.shop_name like CONCAT('%',#{keyWord},'%')
+                </if>
+            </where>
+    </select>
+    <select id="listShopInfoByRegion" parameterType="java.lang.Long" resultMap="ShopRuleResultMap">
+        select shop.id shop_id,shop.shop_name ,company.id company_id,company.company_name
+        from shop_info shop left  join  company_info company on shop.company_id=company.id
+        where shop.region_id=#{regionId}
+    </select>
+    <update id="addRule">
+        update shop_info set rule_id=#{ruleId} where id=#{shopId}
+    </update>
+    <select id="listShopsByRule" resultMap="ShopRuleResultMap" parameterType="java.lang.Long">
+        select  id shop_id,shop_name from shop_info where rule_id=#{ruleId}
+    </select>
+
+    <select id="findDeliveryRuleByShop" parameterType="java.lang.Long" resultMap="DeliveryRuleResultMap">
+        SELECT model.calculation_rule,model.fixed_amount,model.settling_rate,model.upper_value,model.bottom_value
+        FROM shop_info shop
+        left join settling_model model on shop.rule_id=model.id
+        where shop.id=#{shopId}
+    </select>
+
+    <select id="showShopBasicInfo"  parameterType="java.lang.Long" resultMap="ShopBasicResultMap">
+        select shop.id shop_id ,shop.shop_name,p.picture_url ,IFNULL(w.balance,0) balance,IFNULL(good.good_number,0) good_number,
+        IFNULL(o.income,0) income,IFNULL(o.order_number,0) order_number,IFNULL(h.un_handle,0) un_handle,shop.region_id
+        from shop_info shop
+        left join  picture_info p on p.shop_id=shop.id
+        left join  wallet w on w.shop_id=shop.id
+        left join (SELECT count(*) good_number,shop_id FROM good_info group by shop_id) good on good.shop_id=shop.id
+        left join  (select shop_id,  sum(amount) income,count(*) order_number from delivery_order
+        where  DATE_FORMAT(order_time,'%m-%d-%Y') = DATE_FORMAT(NOW(),'%m-%d-%Y') group by shop_id) o  on o.shop_id=shop.id
+        left join (SELECT count(*) un_handle,shop_id FROM diane.delivery_order where  handle_status &gt; 1 and handle_status &lt; 5 group by shop_id) h on h.shop_id=shop.id
+        where shop.id=#{shopId}
+    </select>
+
+    <select id="findRuleModelByShop" parameterType="java.lang.Long" resultMap="RuleModelResultMap">
+        select shop.id shop_id ,model.fixed_amount,model.settling_rate,model.upper_value,model.calculation_rule,model.bottom_value,model.fee,model.percentage
+        from shop_info shop
+        left join settling_model model on shop.rule_id = model.id
+        where shop.id =#{shopId}
+    </select>
+    <select id="findPackageFee" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        select pack_charges from shop_info where id=#{shopId}
+
+    </select>
+
+
+
+</mapper>
